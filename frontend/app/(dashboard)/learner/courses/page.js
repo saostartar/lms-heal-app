@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from '../../../../lib/axios';
+import { useLanguage } from '../../../../lib/context/LanguageContext';
 
 export default function CourseCatalog() {
+  const { currentLanguage } = useLanguage();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,21 +16,44 @@ export default function CourseCatalog() {
     search: '',
   });
   const [categories, setCategories] = useState([]);
-  const [levels, setLevels] = useState(['Beginner', 'Intermediate', 'Advanced']);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [t, setT] = useState({});
+
+  // Load translations
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../../../locales/${currentLanguage}/learner/learnerCourses.json`);
+        setT(translations.default);
+      } catch (error) {
+        console.error('Error loading course catalog translations:', error);
+        // Fallback to English if translation fails
+        const fallback = await import('../../../../locales/en/learner/learnerCourses.json');
+        setT(fallback.default);
+      }
+    };
+
+    loadTranslations();
+  }, [currentLanguage]);
+
+  const levels = ['beginner', 'intermediate', 'advanced'];
   
   // Format category for display
   const formatCategory = (category) => {
-    if (category === 'mental_health') return 'Mental Health';
-    if (category === 'obesity') return 'Obesity';
-    return category.charAt(0).toUpperCase() + category.slice(1);
+    return t.categories?.[category] || category.charAt(0).toUpperCase() + category.slice(1);
+  };
+
+  // Format level for display
+  const formatLevel = (level) => {
+    return t.levels?.[level] || level.charAt(0).toUpperCase() + level.slice(1);
   };
 
   // Get category color class
   const getCategoryColor = (category) => {
     switch(category) {
-      case 'mental_health': return 'from-blue-400 to-indigo-500';
-      case 'obesity': return 'from-purple-400 to-pink-500';
+      case 'psikologi': return 'from-blue-400 to-indigo-500';
+      case 'mental': return 'from-purple-400 to-pink-500';
+      case 'gizi': return 'from-yellow-400 to-orange-500';
       default: return 'from-emerald-400 to-teal-500';
     }
   };
@@ -53,15 +78,17 @@ export default function CourseCatalog() {
           setCategories(uniqueCategories);
         }
       } catch (err) {
-        setError('Failed to load courses. Please try again later.');
+        setError(t.errors?.loadFailed || 'Failed to load courses. Please try again later.');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
     
-    fetchCourses();
-  }, [filters]);
+    if (Object.keys(t).length > 0) {
+      fetchCourses();
+    }
+  }, [filters, t]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +111,19 @@ export default function CourseCatalog() {
     });
   };
 
+  // Return loading state if translations aren't loaded yet
+  if (!t.header) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center">
+        <div className="relative w-20 h-20">
+          <div className="absolute top-0 left-0 w-full h-full border-4 border-primary-200 rounded-full opacity-25 animate-ping"></div>
+          <div className="absolute top-0 left-0 w-full h-full border-4 border-t-primary-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+        </div>
+        <p className="mt-4 text-gray-500 animate-pulse">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
       {/* Header Section */}
@@ -92,11 +132,11 @@ export default function CourseCatalog() {
         <div className="absolute -bottom-32 -left-12 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative px-6 py-12 sm:px-10 sm:py-20 max-w-7xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
-            <span className="block">Discover Your</span>
-            <span className="block text-white/90">Learning Path</span>
+            <span className="block">{t.header?.title?.line1}</span>
+            <span className="block text-white/90">{t.header?.title?.line2}</span>
           </h1>
           <p className="text-lg text-white/80 max-w-xl mb-8">
-            Explore our hand-picked courses designed to advance your knowledge and transform your career.
+            {t.header?.subtitle}
           </p>
           
           {/* Search Bar */}
@@ -104,7 +144,7 @@ export default function CourseCatalog() {
             <input
               type="text"
               name="search"
-              placeholder="Search for a course..."
+              placeholder={t.header?.searchPlaceholder}
               value={filters.search}
               onChange={handleFilterChange}
               className="w-full pl-14 pr-16 py-4 rounded-full shadow-lg border-0 focus:ring-2 focus:ring-white/30 bg-white/10 backdrop-blur-md text-white placeholder-white/60"
@@ -127,7 +167,7 @@ export default function CourseCatalog() {
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 transition-all duration-500 ease-in-out ${filterOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-800">Advanced Filters</h2>
+            <h2 className="text-xl font-bold text-gray-800">{t.filters?.title}</h2>
             <button 
               onClick={clearFilters}
               className="text-sm text-primary-600 hover:text-primary-800 flex items-center"
@@ -135,13 +175,13 @@ export default function CourseCatalog() {
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path>
               </svg>
-              Clear Filters
+              {t.filters?.clearFilters}
             </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t.filters?.category}</label>
               <div className="flex flex-wrap gap-2">
                 <button 
                   onClick={() => setFilters(prev => ({...prev, category: ''}))}
@@ -151,7 +191,7 @@ export default function CourseCatalog() {
                       : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                   } transition-all duration-200`}
                 >
-                  All
+                  {t.filters?.all}
                 </button>
                 {categories.map((category) => (
                   <button 
@@ -170,7 +210,7 @@ export default function CourseCatalog() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Level</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t.filters?.level}</label>
               <div className="flex flex-wrap gap-2">
                 <button 
                   onClick={() => setFilters(prev => ({...prev, level: ''}))}
@@ -180,19 +220,19 @@ export default function CourseCatalog() {
                       : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                   } transition-all duration-200`}
                 >
-                  All
+                  {t.filters?.all}
                 </button>
                 {levels.map((level) => (
                   <button 
                     key={level}
-                    onClick={() => setFilters(prev => ({...prev, level: level.toLowerCase()}))}
+                    onClick={() => setFilters(prev => ({...prev, level}))}
                     className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      filters.level === level.toLowerCase() 
+                      filters.level === level 
                         ? 'bg-primary-100 text-primary-800 ring-2 ring-primary-500 ring-offset-1' 
                         : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     } transition-all duration-200`}
                   >
-                    {level}
+                    {formatLevel(level)}
                   </button>
                 ))}
               </div>
@@ -204,8 +244,8 @@ export default function CourseCatalog() {
       {/* Course Results */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Available Courses</h2>
-          <div className="text-sm text-gray-500">{courses.length} results</div>
+          <h2 className="text-2xl font-bold text-gray-800">{t.results?.title}</h2>
+          <div className="text-sm text-gray-500">{courses.length} {t.results?.resultsCount}</div>
         </div>
         
         {loading ? (
@@ -217,7 +257,7 @@ export default function CourseCatalog() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               </div>
-              <div className="text-primary-600 font-medium">Loading courses...</div>
+              <div className="text-primary-600 font-medium">{t.loading?.text}</div>
             </div>
           </div>
         ) : error ? (
@@ -227,7 +267,7 @@ export default function CourseCatalog() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-red-800 mb-2">Oops! Something went wrong</h3>
+            <h3 className="text-lg font-medium text-red-800 mb-2">{t.errors?.title}</h3>
             <p className="text-red-600">{error}</p>
           </div>
         ) : courses.length === 0 ? (
@@ -237,8 +277,8 @@ export default function CourseCatalog() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No courses found</h3>
-            <p className="text-gray-600 max-w-md mx-auto">We couldn't find any courses matching your criteria. Try adjusting your filters or check back later for new content.</p>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t.empty?.title}</h3>
+            <p className="text-gray-600 max-w-md mx-auto">{t.empty?.message}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -272,7 +312,7 @@ export default function CourseCatalog() {
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-3">
                     <div className="px-3 py-1 rounded-md text-xs font-medium bg-primary-50 text-primary-800 border border-primary-100">
-                      {course.level.charAt(0).toUpperCase() + course.level.slice(1)}
+                      {formatLevel(course.level)}
                     </div>
                     {course.instructor && (
                       <div className="flex items-center text-sm text-gray-500">
@@ -296,7 +336,7 @@ export default function CourseCatalog() {
                     href={`/learner/courses/${course.id}`}
                     className="w-full inline-block text-center px-6 py-3 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium shadow-sm hover:from-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200"
                   >
-                    View Course
+                    {t.course?.viewButton}
                   </Link>
                 </div>
                 

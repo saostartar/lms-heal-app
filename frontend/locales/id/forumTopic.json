@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "forums": "Forum",
+    "category": "Kategori"
+  },
+  "topic": {
+    "startedBy": "Dimulai oleh",
+    "replies": "Balasan",
+    "reply": "Balas",
+    "postReply": "Kirim Balasan",
+    "writeReply": "Tulis balasan Anda di sini...",
+    "posting": "Mengirim...",
+    "postButton": "Kirim Balasan"
+  },
+  "emptyState": {
+    "noReplies": "Belum ada balasan. Jadilah yang pertama merespons!",
+    "loginRequired": "Anda perlu masuk untuk membalas topik ini.",
+    "loginButton": "Masuk untuk Membalas"
+  },
+  "locked": {
+    "title": "Topik Terkunci",
+    "description": "Topik ini terkunci dan tidak lagi menerima balasan."
+  },
+  "post": {
+    "posted": "Diposting",
+    "edited": "(diedit)"
+  },
+  "loading": {
+    "discussion": "Memuat diskusi..."
+  },
+  "error": {
+    "title": "Error",
+    "topicNotFound": "Topik tidak ditemukan",
+    "failedToLoad": "Gagal memuat diskusi. Silakan coba lagi nanti.",
+    "failedToPost": "Gagal mengirim balasan. Silakan coba lagi."
+  }
+}

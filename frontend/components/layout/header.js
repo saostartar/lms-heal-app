@@ -1,208 +1,195 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useAuth } from "../../lib/context/auth-context";
+import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../../lib/context/auth-context';
+import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from '../ui/LanguageSelector';
+import Image from 'next/image';
 
 export default function Header({ toggleSidebar }) {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout } = useAuth();
+  const { t } = useTranslation('common');
+  const router = useRouter();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  
-  // Handle scroll effects
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
-  // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isUserMenuOpen && !event.target.closest('.user-menu-container')) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setIsUserMenuOpen(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isUserMenuOpen]);
+  }, [isUserMenuOpen, isMobileMenuOpen]);
+
+  // Navigation items based on authentication status
+  const publicNavItems = [
+    { 
+      href: "/", 
+      label: t('nav.home'), 
+      icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" 
+    },
+    { 
+      href: "/courses", 
+      label: t('nav.courses'), 
+      icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" 
+    },
+    { 
+      href: "/forum", 
+      label: t('nav.forum'), 
+      icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" 
+    },
+    { 
+      href: "/about-us", 
+      label: t('nav.about'), 
+      icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+    },
+    { 
+      href: "/faq", 
+      label: t('nav.faq'), 
+      icon: "M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+    }
+  ];
+
+  const authenticatedNavItems = [
+    ...publicNavItems,
+    { 
+      href: "/news", 
+      label: t('nav.news'), 
+      icon: "M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" 
+    }
+  ];
 
   return (
-    <header 
-      className={`sticky top-0 z-50 transition-all duration-500 ${
-        scrolled 
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg' 
-          : 'bg-white/95 shadow-sm'
-      }`}
-    >
+    <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          {/* Left side: Logo and navigation */}
-          <div className="flex items-center">
-            {/* Mobile menu button */}
-            <div className="flex items-center md:hidden">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo Section */}
+          <div className="flex items-center space-x-4">
+            {user && (
               <button
-                type="button"
-                className="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:text-primary-600 hover:bg-primary-50/80 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all duration-300"
                 onClick={toggleSidebar}
+                className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
               >
-                <span className="sr-only">Open sidebar</span>
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-            </div>
-
-            {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center space-x-2 group">
-                <div className="bg-gradient-to-br from-primary-500 to-secondary-600 w-9 h-9 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                  <span className="text-white font-bold text-lg">E</span>
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent tracking-tight">
-                  EduLMS
-                </span>
-              </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden sm:ml-10 sm:flex sm:space-x-8 items-center">
-              {[
-                { href: "/courses", label: "Courses" },
-                { href: "/news", label: "News" },
-                { href: "/forum", label: "Forum" },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative px-3 py-4 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200 group"
-                >
-                  {item.label}
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
-              ))}
-              
-              {isAuthenticated && user?.role === "admin" && (
-                <Link
-                  href="/admin/dashboard"
-                  className="relative px-3 py-4 text-sm font-medium text-primary-600 group"
-                >
-                  <span className="flex items-center">
-                    Admin
-                    <span className="ml-1.5 w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
-                  </span>
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
-              )}
-            </nav>
+            )}
+            
+            <Link href="/" className="flex items-center space-x-3">
+              {/* Logo Image */}
+              <div className="relative w-10 h-10">
+                <Image
+                  src="/logo.png"
+                  alt="HEAL Student Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+                  HEAL Student
+                </h1>
+                <p className="text-xs text-gray-500 -mt-1">Health Learning Platform</p>
+              </div>
+            </Link>
           </div>
 
-          {/* Right side: User section */}
-          <div className="flex items-center">
-            {isAuthenticated ? (
-              <div className="ml-3 relative flex items-center user-menu-container">
-                {/* Role badge */}
-                <div className="mr-4">
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm ${
-                    user?.role === 'admin' 
-                      ? 'bg-purple-100 text-purple-800 border border-purple-200' 
-                      : user?.role === 'instructor' 
-                        ? 'bg-blue-100 text-blue-800 border border-blue-200' 
-                        : 'bg-green-100 text-green-800 border border-green-200'
-                  }`}>
-                    {user?.role === 'admin' ? 'Admin' : 
-                     user?.role === 'instructor' ? 'Instructor' : 'Learner'}
-                  </div>
-                </div>
-                
-                {/* User avatar button */}
-                <div>
-                  <button
-                    type="button"
-                    className={`relative overflow-hidden rounded-full h-10 w-10 bg-gradient-to-br from-primary-500 to-secondary-600 flex items-center justify-center text-white font-medium border-2 border-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
-                      isUserMenuOpen ? 'ring-2 ring-offset-2 ring-primary-500' : ''
-                    }`}
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    {user?.name?.charAt(0).toUpperCase() || "U"}
-                  </button>
-                </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-1">
+            {(user ? authenticatedNavItems : publicNavItems).map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                </svg>
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </nav>
 
-                {/* User dropdown menu */}
+          {/* Right Section */}
+          <div className="flex items-center space-x-4">
+            {/* Language Selector */}
+            <LanguageSelector />
+
+            {/* User Menu or Auth Links */}
+            {user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-medium text-sm">
+                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </span>
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+                  </div>
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="origin-top-right absolute right-0 mt-48 w-72 rounded-xl shadow-xl py-2 bg-white/95 backdrop-blur-lg ring-1 ring-black/5 focus:outline-none z-10 border border-gray-100 transform transition-all duration-200 ease-out">
-                    <div className="p-4 pb-2">
-                      <div className="font-semibold text-primary-600 text-lg">{user?.name}</div>
-                      <div className="text-xs text-gray-500 mt-1 truncate">{user?.email}</div>
-                      <div className={`mt-3 inline-block px-3 py-1 rounded-full text-xs font-medium capitalize shadow-sm ${
-                        user?.role === 'admin' 
-                          ? 'bg-purple-100 text-purple-800 border border-purple-200' 
-                          : user?.role === 'instructor' 
-                            ? 'bg-blue-100 text-blue-800 border border-blue-200' 
-                            : 'bg-green-100 text-green-800 border border-green-200'
-                      }`}>
-                        {user?.role}
-                      </div>
-                    </div>
-                    
-                    <div className="border-t border-gray-100 my-2"></div>
-                    
-                    <div className="px-2">
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
+                    <div className="py-2">
                       <Link
-                        href="/profile"
-                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50/80 hover:text-primary-600 rounded-lg transition-colors duration-200 gap-3 group"
+                        href={`/${user.role}/profile`}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200 group"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <span className="bg-primary-100 p-2 rounded-lg group-hover:bg-primary-200 transition-colors duration-200">
-                          <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zm-4 7a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-primary-200 transition-colors">
+                          <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
-                        </span>
-                        Your Profile
+                        </div>
+                        <span>{t('nav.profile')}</span>
                       </Link>
                       
                       <Link
-                        href="/settings"
-                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50/80 hover:text-primary-600 rounded-lg transition-colors duration-200 gap-3 group mt-1"
+                        href={`/${user.role}/settings`}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200 group"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <span className="bg-primary-100 p-2 rounded-lg group-hover:bg-primary-200 transition-colors duration-200">
-                          <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-primary-200 transition-colors">
+                          <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
-                        </span>
-                        Settings
+                        </div>
+                        <span>{t('nav.settings')}</span>
                       </Link>
-                    </div>
-                    
-                    <div className="border-t border-gray-100 my-2"></div>
-                    
-                    <div className="px-2">
+                      
+                      <div className="border-t border-gray-100 my-2"></div>
+                      
                       <button
                         onClick={() => {
                           logout();
                           setIsUserMenuOpen(false);
                         }}
-                        className="w-full text-left flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50/80 rounded-lg transition-colors duration-200 gap-3 group"
+                        className="w-full flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 group"
                       >
-                        <span className="bg-red-100 p-2 rounded-lg group-hover:bg-red-200 transition-colors duration-200">
-                          <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-red-200 transition-colors">
+                          <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                           </svg>
-                        </span>
-                        Sign out
+                        </div>
+                        <span>{t('nav.logout')}</span>
                       </button>
                     </div>
                   </div>
@@ -212,20 +199,72 @@ export default function Header({ toggleSidebar }) {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 border border-primary-300 hover:border-primary-400 rounded-lg transition-colors duration-200 hover:bg-primary-50/50"
+                  className="px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 border border-primary-300 hover:border-primary-400 rounded-xl transition-all duration-200 hover:bg-primary-50/50 flex items-center space-x-2"
                 >
-                  Log in
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  <span>{t('nav.login')}</span>
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 rounded-lg shadow-sm hover:shadow transition-all duration-200"
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2"
                 >
-                  Sign up
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                  </svg>
+                  <span>{t('nav.register')}</span>
                 </Link>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden mobile-menu-container">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              {(user ? authenticatedNavItems : publicNavItems).map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                  </svg>
+                  {item.label}
+                </Link>
+              ))}
+              
+              {!user && (
+                <div className="pt-4 space-y-2">
+                  <Link
+                    href="/login"
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-primary-600 border border-primary-300 rounded-xl hover:bg-primary-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    {t('nav.login')}
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 rounded-xl shadow-lg transition-all duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    {t('nav.register')}
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

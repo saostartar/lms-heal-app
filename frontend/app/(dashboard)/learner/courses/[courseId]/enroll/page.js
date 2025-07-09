@@ -1,151 +1,44 @@
-'use client';
+import axios from '@/lib/axios';
+import CourseEnrollClient from './enroll-client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import axios from '../../../../../../lib/axios';
+// Fungsi ini memberitahu Next.js semua ID course yang ada
+export async function generateStaticParams() {
+  try {
+    const res = await axios.get('/api/courses');
+    const courses = res.data.data;
+    if (!Array.isArray(courses)) return [];
 
-export default function CourseEnrollPage() {
-  const router = useRouter();
-  const params = useParams();
+    return courses.map((course) => ({
+      courseId: course.id.toString(),
+    }));
+  } catch (error) {
+    console.error("Gagal membuat static params untuk enroll page:", error);
+    return [];
+  }
+}
+
+// Fungsi ini mengambil data untuk satu course spesifik saat build
+async function getCourseData(courseId) {
+  try {
+    const { data } = await axios.get(`/api/courses/${courseId}`);
+    return { course: data.data, error: null };
+  } catch (error) {
+    console.error(`Gagal mengambil data untuk course ${courseId}:`, error);
+    return { course: null, error: 'Failed to load course details.' };
+  }
+}
+
+// Ini adalah Server Component
+export default async function CourseEnrollPage({ params }) {
   const { courseId } = params;
-  
-  const [course, setCourse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [enrolling, setEnrolling] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const { course, error } = await getCourseData(courseId);
 
-  useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(`/api/courses/${courseId}`);
-        setCourse(data.data);
-      } catch (err) {
-        setError('Failed to load course: ' + (err.response?.data?.message || err.message));
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchCourse();
-  }, [courseId]);
-
-  const handleEnroll = async () => {
-    try {
-      setEnrolling(true);
-      // Use the correct API endpoint
-      await axios.post('/api/enrollments', { courseId });
-      setSuccess(true);
-      
-      // Redirect to course page after successful enrollment
-      setTimeout(() => {
-        router.push(`/dashboard/learner/courses/${courseId}/enroll`);
-      }, 1500);
-    } catch (err) {
-      setError('Failed to enroll in course: ' + (err.response?.data?.message || err.message));
-      console.error(err);
-    } finally {
-      setEnrolling(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 p-4 rounded-md">
-        <div className="text-red-700">{error}</div>
-        <Link href="/dashboard/learner/courses" className="text-primary-600 hover:underline mt-4 inline-block">
-          Browse other courses
-        </Link>
-      </div>
-    );
-  }
-
-  if (!course) {
-    return (
-      <div className="text-center p-4">
-        <div className="text-gray-800">Course not found</div>
-        <Link href="/dashboard/learner/courses" className="text-primary-600 hover:underline mt-4 inline-block">
-          Browse courses
-        </Link>
-      </div>
-    );
-  }
-
-  if (success) {
-    return (
-      <div className="bg-green-50 p-8 rounded-md text-center">
-        <svg className="mx-auto h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <h2 className="mt-4 text-lg font-medium text-green-800">Successfully enrolled!</h2>
-        <p className="mt-2 text-sm text-green-700">
-          You have been successfully enrolled in the course. Redirecting to course page...
-        </p>
-      </div>
-    );
-  }
-
+  // Render Client Component dengan data awal dari server
   return (
-    <div className="py-6">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold mb-4">Enroll in Course</h1>
-          
-          <div className="mb-6 border-b pb-4">
-            <h2 className="text-xl font-medium">{course.title}</h2>
-            <div className="flex flex-wrap gap-2 mt-2">
-              <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
-                {course.category === 'mental_health' ? 'Mental Health' : 
-                course.category === 'obesity' ? 'Obesity' : 'Other'}
-              </span>
-              <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">
-                {course.level.charAt(0).toUpperCase() + course.level.slice(1)}
-              </span>
-            </div>
-            
-            <p className="mt-4 text-gray-600">{course.description}</p>
-          </div>
-          
-          <div className="mb-6">
-            <h3 className="text-lg font-medium mb-2">What you'll learn</h3>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Access to all course materials and resources</li>
-              <li>Completion tracking for your progress</li>
-              {course.preTestQuiz && (
-                <li>Pre and post-tests to measure your knowledge improvement</li>
-              )}
-              <li>Certificate upon completion (if available)</li>
-            </ul>
-          </div>
-          
-          <div className="text-center">
-            <button
-              onClick={handleEnroll}
-              disabled={enrolling}
-              className="btn btn-primary px-6 py-3"
-            >
-              {enrolling ? 'Enrolling...' : 'Confirm Enrollment'}
-            </button>
-            
-            <div className="mt-4">
-              <Link href={`/dashboard/learner/courses/${courseId}`} className="text-primary-600 hover:text-primary-800">
-                Cancel and go back
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <CourseEnrollClient 
+      initialCourse={course} 
+      initialError={error}
+      params={params} 
+    />
   );
 }

@@ -1,0 +1,29 @@
+{
+  "page": {
+    "title": "Selamat Datang Kembali",
+    "subtitle": "Masuk ke akun Anda"
+  },
+  "form": {
+    "email": {
+      "label": "Alamat Email",
+      "placeholder": "anda@contoh.com"
+    },
+    "password": {
+      "label": "Kata Sandi",
+      "placeholder": "••••••••"
+    },
+    "forgotPassword": "Lupa kata sandi?",
+    "rememberMe": "Ingat saya",
+    "submitButton": {
+      "default": "Masuk",
+      "loading": "Sedang masuk..."
+    }
+  },
+  "errors": {
+    "generic": "Terjadi kesalahan. Silakan coba lagi."
+  },
+  "footer": {
+    "noAccount": "Belum punya akun?",
+    "createAccount": "Buat akun"
+  }
+}

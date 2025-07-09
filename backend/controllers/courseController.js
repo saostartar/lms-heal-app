@@ -176,8 +176,26 @@ export const createCourse = async (req, res, next) => {
 
     try {
       const courseData = { ...req.body };
+      
+      // Parse JSON fields if they are strings
+      if (typeof courseData.tags === 'string') {
+        try {
+          courseData.tags = JSON.parse(courseData.tags);
+        } catch (e) {
+          courseData.tags = [];
+        }
+      }
+
+      // Ensure boolean fields are properly converted
+      courseData.requirePreTest = courseData.requirePreTest === 'true' || courseData.requirePreTest === true;
+      courseData.isPublished = courseData.isPublished === 'true' || courseData.isPublished === true;
+      
+      // Convert duration to integer if provided
+      if (courseData.duration) {
+        courseData.duration = parseInt(courseData.duration);
+      }
+
       courseData.instructorId = req.user.id;
-      courseData.isPublished = true; // Or based on your logic
       courseData.isApproved = true; // Or based on your logic
       courseData.approvedBy = req.user.id; // Or based on your logic
 
@@ -280,6 +298,29 @@ export const updateCourse = async (req, res, next) => {
     }
 
     const updateData = { ...req.body };
+    
+    // Parse JSON fields if they are strings
+    if (typeof updateData.tags === 'string') {
+      try {
+        updateData.tags = JSON.parse(updateData.tags);
+      } catch (e) {
+        updateData.tags = [];
+      }
+    }
+
+    // Ensure boolean fields are properly converted
+    if (updateData.requirePreTest !== undefined) {
+      updateData.requirePreTest = updateData.requirePreTest === 'true' || updateData.requirePreTest === true;
+    }
+    if (updateData.isPublished !== undefined) {
+      updateData.isPublished = updateData.isPublished === 'true' || updateData.isPublished === true;
+    }
+    
+    // Convert duration to integer if provided
+    if (updateData.duration) {
+      updateData.duration = parseInt(updateData.duration);
+    }
+
     const oldThumbnail = course.thumbnail;
     let newThumbnail = null;
 
@@ -1071,6 +1112,96 @@ export const getPublicCourse = async (req, res, next) => {
       data: course,
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getPublicCourses = async (req, res, next) => {
+  try {
+    const courses = await Course.findAll({
+      attributes: ['id', 'title'], // Hanya ambil field yang dibutuhkan
+      where: { isPublished: true } // Pastikan hanya kursus yang sudah publish
+    });
+
+    res.status(200).json({
+      success: true,
+      count: courses.length,
+      data: courses,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllPathsForStaticGeneration = async (req, res, next) => {
+  try {
+    console.log('getAllPathsForStaticGeneration called'); // Debug log
+    
+    // Gunakan query manual yang lebih reliable
+    const result = await sequelize.query(`
+      SELECT 
+        c.id as courseId,
+        m.id as moduleId, 
+        q.id as quizId,
+        quest.id as questionId
+      FROM Courses c
+      INNER JOIN Modules m ON c.id = m.courseId
+      INNER JOIN Quizzes q ON m.id = q.moduleId  
+      INNER JOIN Questions quest ON q.id = quest.quizId
+      ORDER BY c.id, m.id, q.id, quest.id
+    `, {
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    console.log(`Found ${result.length} question records`); // Debug log
+
+    // Buat struktur path dari hasil query
+    const paths = [];
+    
+    // Ambil semua kombinasi course-module-quiz untuk path "create"
+    const quizResult = await sequelize.query(`
+      SELECT DISTINCT 
+        c.id as courseId,
+        m.id as moduleId, 
+        q.id as quizId
+      FROM Courses c
+      INNER JOIN Modules m ON c.id = m.courseId
+      INNER JOIN Quizzes q ON m.id = q.moduleId
+      ORDER BY c.id, m.id, q.id
+    `, {
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    console.log(`Found ${quizResult.length} quiz records for create paths`); // Debug log
+
+    // Tambahkan path untuk halaman "create" question
+    quizResult.forEach(row => {
+      paths.push({
+        courseId: row.courseId.toString(),
+        moduleId: row.moduleId.toString(),
+        quizId: row.quizId.toString(),
+        questionId: 'create',
+      });
+    });
+
+    // Tambahkan path untuk setiap question yang ada
+    result.forEach(row => {
+      paths.push({
+        courseId: row.courseId.toString(),
+        moduleId: row.moduleId.toString(),
+        quizId: row.quizId.toString(),
+        questionId: row.questionId.toString(),
+      });
+    });
+
+    console.log(`Generated ${paths.length} total paths`); // Debug log
+
+    res.status(200).json({
+      success: true,
+      data: paths,
+    });
+  } catch (error) {
+    console.error('Error in getAllPathsForStaticGeneration:', error);
     next(error);
   }
 };

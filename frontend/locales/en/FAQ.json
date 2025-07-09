@@ -1,0 +1,141 @@
+{
+  "hero": {
+    "sectionLabel": "HEAL STUDENT FAQ",
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to common questions about the HEAL Student program and how to start your holistic health journey."
+  },
+  "faqData": [
+    {
+      "id": 1,
+      "question": "What is HEAL Student: Health, Emotion, and Active Living?",
+      "answer": {
+        "intro": "HEAL Student was created by researchers from the USA, Malaysia, and Indonesia with the goal of providing free courses to internet users.",
+        "coverage": "The courses provided include psychology, mental health, and balanced nutrition.",
+        "background": {
+          "title": "Background:",
+          "content": "This platform is based on the increasing number of obesity cases in East Asia, particularly among adolescents."
+        },
+        "countries": {
+          "usa": "USA",
+          "malaysia": "Malaysia",
+          "indonesia": "Indonesia"
+        },
+        "subjects": {
+          "psychology": "psychology",
+          "mentalHealth": "mental health",
+          "nutrition": "balanced nutrition"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "question": "Who can participate in this free course program?",
+      "answer": {
+        "intro": "This free course program is open to everyone. Access to HEAL Student is very easy so that everyone can access it.",
+        "expertNote": {
+          "title": "Our facilitators are experts in their fields",
+          "content": "so this platform is quite safe and reliable."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "question": "How is this program delivered?",
+      "answer": {
+        "intro": "This program is launched publicly and has several courses in it.",
+        "schedule": {
+          "title": "Schedule",
+          "content": "All six courses open every 3 weeks"
+        },
+        "language": {
+          "title": "Language",
+          "content": "Available in 2 languages: Indonesian & English"
+        },
+        "support": {
+          "title": "Support",
+          "content": "We provide mentors or facilitators to help your learning"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "question": "What topics are covered?",
+      "answer": {
+        "intro": "HEAL Student offers 6 comprehensive courses designed to provide holistic understanding of health:",
+        "courses": [
+          {
+            "num": 1,
+            "title": "Introduction to Balanced Nutrition and Eating Patterns",
+            "icon": "🥗"
+          },
+          {
+            "num": 2,
+            "title": "Introduction to Psychology",
+            "icon": "🧠"
+          },
+          {
+            "num": 3,
+            "title": "Introduction to Mental Health",
+            "icon": "💚"
+          },
+          {
+            "num": 4,
+            "title": "Synergizing Physical and Mental Health",
+            "icon": "⚖️"
+          },
+          {
+            "num": 5,
+            "title": "Implementation of Physical and Mental Health",
+            "icon": "🎯"
+          },
+          {
+            "num": 6,
+            "title": "Evaluation of Physical and Mental Health",
+            "icon": "📊"
+          }
+        ],
+        "courseLabel": "Course"
+      }
+    },
+    {
+      "id": 5,
+      "question": "How much does it cost to participate?",
+      "answer": {
+        "free": "100% FREE",
+        "noHiddenCosts": "No hidden costs!",
+        "features": [
+          "4-5 hours per course",
+          "Practical implementation"
+        ],
+        "implementation": "You can follow the entire program and implement it in your daily activities without any charges."
+      }
+    },
+    {
+      "id": 6,
+      "question": "What support is available for users during the program?",
+      "answer": {
+        "intro": "We are committed to providing full support to every program participant:",
+        "supports": [
+          {
+            "title": "Program Access Guide",
+            "content": "Registered users will receive a complete guide to access programs and courses."
+          },
+          {
+            "title": "Professional Mentors",
+            "content": "We provide expert mentors in their fields to accompany your learning journey."
+          },
+          {
+            "title": "Weekly Zoom Meetings",
+            "content": "Participants can attend weekly Zoom meetings to ask questions or get help with issues related to psychological health, mental health, and balanced nutrition."
+          }
+        ]
+      }
+    }
+  ],
+  "cta": {
+    "title": "Still Have Questions?",
+    "description": "Our team is ready to help you. Contact us or join the HEAL Student community for further support.",
+    "registerButton": "Register Now - Free",
+    "coursesButton": "View Available Courses"
+  }
+}

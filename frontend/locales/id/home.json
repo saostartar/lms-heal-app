@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "badge": "Platform Pembelajaran Online",
+    "welcome": "Selamat Datang di",
+    "brandName": "HEAL Student",
+    "subtitle": "Platform Pembelajaran Kesehatan Holistik",
+    "description": "Platform kursus online gratis berbasis psikologi untuk membantu Anda memperoleh pengetahuan tentang kesehatan psikologi, kesehatan mental, dan gizi seimbang untuk gaya hidup yang lebih sehat.",
+    "ctaButton": "Mulai Belajar Sekarang"
+  },
+  "mission": {
+    "sectionLabel": "MENGAPA HEAL STUDENT ADA?",
+    "title": "Mengapa HEAL Student Ada?",
+    "eraOfChange": {
+      "title": "Era Perubahan",
+      "description": "Era yang telah berubah dan menjadi lebih maju sangat mempengaruhi kehidupan manusia, termasuk pola gaya hidup mereka. HEAL Student didirikan dengan tujuan mempersiapkan pengguna website dan generasi masa depan dengan keterampilan gaya hidup sehat yang dibutuhkan."
+    },
+    "currentSituation": {
+      "title": "Kondisi Saat Ini",
+      "description": "Saat ini, masih banyak orang yang melakukan kesalahan dalam mengatur pola makan mereka, yang berdampak pada obesitas, kondisi psikologis, dan kesehatan mental. Kemudahan memesan makanan cepat saji yang tidak sesuai dengan gizi seimbang merupakan salah satu latar belakang utama dari masalah ini.",
+      "statSource": "World Obesity Atlas (2023)",
+      "statText": "Tingkat obesitas diprediksi akan meningkat dari <strong>14%</strong> menjadi <strong>24%</strong> pada tahun 2035."
+    },
+    "ourMission": {
+      "title": "Misi Kami",
+      "quote": "Menjaga kesehatan psikologi, kesehatan mental, dan gizi seimbang",
+      "description": "Misi kami adalah menyediakan platform kursus online gratis untuk membantu pengguna memperoleh pengetahuan tentang kesehatan psikologi, kesehatan mental, dan gizi seimbang, sehingga mempengaruhi pola gaya hidup sehat.",
+      "psychology": "Psikologi",
+      "mentalHealth": "Kesehatan Mental",
+      "nutrition": "Gizi"
+    }
+  },
+  "joinUs": {
+    "sectionLabel": "BERGABUNG DENGAN KAMI",
+    "title": "Butuh Bantuan atau Ingin Berdiskusi?",
+    "description": "Kami menyediakan <strong>mentor</strong> sehingga peserta dapat bergabung dalam <strong>pertemuan Zoom mingguan</strong> untuk bertanya atau membutuhkan bantuan terkait masalah kesehatan psikologi, kesehatan mental, dan gizi seimbang.",
+    "features": {
+      "qaSession": "Sesi Tanya Jawab",
+      "groupDiscussion": "Diskusi Kelompok",
+      "counseling": "Konseling"
+    },
+    "buttons": {
+      "schedule": "Lihat Jadwal Sesi Mingguan",
+      "startLearning": "Mulai Belajar Sekarang"
+    }
+  },
+  "accessibility": {
+    "scrollToTop": "Gulir ke atas"
+  },
+  "heroImage": {
+    "title": "Kesehatan & Wellness",
+    "subtitle": "Untuk Kehidupan yang Lebih Baik"
+  }
+}

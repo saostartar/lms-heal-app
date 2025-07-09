@@ -24,8 +24,8 @@ const Course = sequelize.define('Course', {
     allowNull: true
   },
   category: {
-    type: DataTypes.ENUM('mental_health', 'obesity', 'other'),
-    defaultValue: 'other'
+    type: DataTypes.ENUM('psikologi', 'mental', 'gizi'),
+    defaultValue: 'gizi'
   },
   level: {
     type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),

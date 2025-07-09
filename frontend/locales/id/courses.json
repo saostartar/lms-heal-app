@@ -1,0 +1,115 @@
+{
+  "hero": {
+    "title": "Program Kursus Gratis Kami",
+    "description": "Platform HEAL Student menyediakan 6 kursus yang dipimpin oleh fasilitator ahli selama 90 menit secara online.",
+    "features": {
+      "multilingual": "Bahasa Indonesia & Inggris",
+      "schedule": "Dibuka Setiap 3 Minggu",
+      "mentors": "Mentor Profesional"
+    }
+  },
+  "courseOutline": {
+    "title": "Daftar Kursus Tersedia",
+    "description": "Setiap kursus dirancang untuk memberikan pemahaman mendalam tentang kesehatan holistik dengan pendekatan praktis dan berkelanjutan.",
+    "courses": {
+      "1": {
+        "title": "Pengenalan Terhadap Gizi Seimbang dan Pola Makan",
+        "topics": [
+          "Pengenalan gizi seimbang yang dibutuhkan oleh tubuh",
+          "Macam-macam makanan yang mengandung gizi sesuai",
+          "Seberapa banyak gizi yang dibutuhkan oleh tubuh",
+          "Pentingnya mengkonsumsi gizi seimbang bagi tubuh",
+          "Bagaimana cara mengatur pola makan",
+          "Mengapa harus mengatur pola makan",
+          "Konsultasi"
+        ]
+      },
+      "2": {
+        "title": "Pengenalan Terhadap Psikologi",
+        "topics": [
+          "Pengenalan terhadap psikologi",
+          "Pengenalan macam-macam masalah psikologi dan ciri-cirinya",
+          "Cara menjaga kesehatan psikologi",
+          "Mengapa harus menjaga kesehatan psikologi dan dampaknya",
+          "Konsultasi"
+        ]
+      },
+      "3": {
+        "title": "Pengenalan Terhadap Kesehatan Mental",
+        "topics": [
+          "Pengenalan terhadap kesehatan mental",
+          "Ciri-ciri kesehatan mental terganggu",
+          "Cara mencegah kesehatan mental terganggu",
+          "Bagaimana cara menjaga kesehatan pada mental",
+          "Seberapa pentingnya kesehatan mental",
+          "Konsultasi"
+        ]
+      },
+      "4": {
+        "title": "Mensinergikan Kesehatan Fisik dan Mental",
+        "topics": [
+          "Pentingnya bersinergi antara kesehatan fisik dan mental",
+          "Bagaimana cara mensinergikan kesehatan fisik dan kesehatan mental"
+        ]
+      },
+      "5": {
+        "title": "Mengimplementasikan Kesehatan Fisik dan Mental",
+        "topics": [
+          "Cara mengimplementasikan kesehatan fisik dan mental dalam kehidupan sehari-hari",
+          "Manfaat dan dampak yang diterima",
+          "Mengapa harus diimplementasikan"
+        ]
+      },
+      "6": {
+        "title": "Evaluasi Kesehatan Fisik dan Mental",
+        "topics": [
+          "Evaluasi kesehatan fisik dan mental dari hasil implementasi",
+          "Konsultasi"
+        ]
+      }
+    },
+    "learningMaterials": "Materi Pembelajaran:",
+    "course": "Kursus",
+    "minutes": "Menit",
+    "topics": "Topik"
+  },
+  "filters": {
+    "searchCourses": "Cari Kursus",
+    "searchPlaceholder": "Cari kursus...",
+    "category": "Kategori",
+    "allCategories": "Semua Kategori",
+    "difficultyLevel": "Tingkat Kesulitan",
+    "allLevels": "Semua Tingkat",
+    "applyFilter": "Terapkan Filter"
+  },
+  "availableCourses": {
+    "title": "Kursus yang Tersedia",
+    "description": "Pilih dan mulai perjalanan pembelajaran Anda hari ini",
+    "loadingCourses": "Memuat kursus...",
+    "noCoursesFound": "Tidak ada kursus ditemukan",
+    "noCoursesDescription": "Kami tidak menemukan kursus yang sesuai dengan kriteria pencarian Anda. Coba sesuaikan filter pencarian.",
+    "free": "GRATIS",
+    "expertMentor": "Mentor Ahli",
+    "viewPreview": "Lihat Preview"
+  },
+  "callToAction": {
+    "title": "Siap Memulai Perjalanan Kesehatan Anda?",
+    "description": "Bergabunglah dengan ribuan peserta lainnya dan dapatkan pengetahuan kesehatan holistik yang akan mengubah hidup Anda.",
+    "registerNow": "Daftar Sekarang - Gratis",
+    "alreadyAccount": "Sudah Punya Akun? Masuk"
+  },
+  "categories": {
+    "psikologi": "Psikologi",
+    "mental": "Kesehatan Mental",
+    "gizi": "Gizi & Nutrisi"
+  },
+  "levels": {
+    "beginner": "Pemula",
+    "intermediate": "Menengah",
+    "advanced": "Lanjutan"
+  },
+  "common": {
+    "consultation": "Konsultasi",
+    "minutes": "Menit"
+  }
+}

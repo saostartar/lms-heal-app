@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "backToForums": "Back to Forums"
+  },
+  "discussions": {
+    "title": "Discussions",
+    "startDiscussion": "Start a Discussion",
+    "cancel": "Cancel",
+    "loginToStart": "Log in to Start a Discussion"
+  },
+  "createForm": {
+    "title": "Start a New Discussion",
+    "titleLabel": "Title",
+    "titlePlaceholder": "What's this discussion about?",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Share your thoughts...",
+    "creating": "Creating...",
+    "createButton": "Create Discussion"
+  },
+  "emptyState": {
+    "noDiscussions": "No discussions yet.",
+    "beFirst": "Be the first to start one!"
+  },
+  "topicStats": {
+    "views": "views",
+    "replies": "replies",
+    "lastReply": "Last reply"
+  },
+  "loading": {
+    "message": "Loading..."
+  },
+  "error": {
+    "categoryNotFound": "Category not found",
+    "failedToLoad": "Failed to load discussions. Please try again later.",
+    "failedToCreate": "Failed to create topic. Please try again."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "forums": "Forums",
+    "category": "Category"
+  },
+  "topic": {
+    "startedBy": "Started by",
+    "replies": "Replies",
+    "reply": "Reply",
+    "postReply": "Post a Reply",
+    "writeReply": "Write your reply here...",
+    "posting": "Posting...",
+    "postButton": "Post Reply"
+  },
+  "emptyState": {
+    "noReplies": "No replies yet. Be the first to respond!",
+    "loginRequired": "You need to be logged in to reply to this topic.",
+    "loginButton": "Log in to Reply"
+  },
+  "locked": {
+    "title": "Topic Locked",
+    "description": "This topic is locked and no longer accepts replies."
+  },
+  "post": {
+    "posted": "Posted",
+    "edited": "(edited)"
+  },
+  "loading": {
+    "discussion": "Loading discussion..."
+  },
+  "error": {
+    "title": "Error",
+    "topicNotFound": "Topic not found",
+    "failedToLoad": "Failed to load discussion. Please try again later.",
+    "failedToPost": "Failed to post reply. Please try again."
+  }
+}

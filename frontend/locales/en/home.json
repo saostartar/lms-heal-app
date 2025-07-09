@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "badge": "Online Learning Platform",
+    "welcome": "Welcome to",
+    "brandName": "HEAL Student",
+    "subtitle": "Holistic Health Learning Platform",
+    "description": "Free online course platform based on psychology to help you gain knowledge about psychology health, mental health, and balanced nutrition for a healthier lifestyle.",
+    "ctaButton": "Start Learning Now"
+  },
+  "mission": {
+    "sectionLabel": "WHY HEAL STUDENT EXISTS?",
+    "title": "Why HEAL Student Exists?",
+    "eraOfChange": {
+      "title": "Era of Change",
+      "description": "The era that has changed and become more advanced greatly affects human life, including their lifestyle patterns. HEAL Student was founded with the goal of better preparing website users and future generations with the healthy lifestyle skills needed."
+    },
+    "currentSituation": {
+      "title": "Current Situation",
+      "description": "Currently, many people still make mistakes in managing their eating patterns, which impacts obesity, psychological conditions, and mental health. The ease of ordering fast food that doesn't comply with balanced nutrition is one of the main backgrounds of this problem.",
+      "statSource": "World Obesity Atlas (2023)",
+      "statText": "Obesity rates are predicted to increase from <strong>14%</strong> to <strong>24%</strong> by 2035."
+    },
+    "ourMission": {
+      "title": "Our Mission",
+      "quote": "Maintaining psychological health, mental health, and balanced nutrition",
+      "description": "Our mission is to provide a free online course platform to help users gain knowledge about psychological health, mental health, and balanced nutrition, so it affects a healthy lifestyle pattern.",
+      "psychology": "Psychology",
+      "mentalHealth": "Mental Health",
+      "nutrition": "Nutrition"
+    }
+  },
+  "joinUs": {
+    "sectionLabel": "JOIN WITH US",
+    "title": "Need Help or Want to Discuss?",
+    "description": "We provide <strong>mentors</strong> so participants can join <strong>weekly Zoom meetings</strong> to ask questions or need help regarding problems related to psychological health, mental health, and balanced nutrition.",
+    "features": {
+      "qaSession": "Q&A Session",
+      "groupDiscussion": "Group Discussion",
+      "counseling": "Counseling"
+    },
+    "buttons": {
+      "schedule": "View Weekly Session Schedule",
+      "startLearning": "Start Learning Now"
+    }
+  },
+  "accessibility": {
+    "scrollToTop": "Scroll to top"
+  },
+  "heroImage": {
+    "title": "Health & Wellness",
+    "subtitle": "For a Better Life"
+  }
+}

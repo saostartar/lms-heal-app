@@ -16,7 +16,8 @@ import {
   addOption, 
   updateOption, 
   deleteOption,
-  getQuizQuestions
+  getQuizQuestions,
+  getQuestionById
 } from '../controllers/questionController.js';
 import { protect, authorize } from '../middlewares/auth.js';
 
@@ -84,7 +85,7 @@ router.post(
 );
 
 router.get('/:quizId/questions', getQuizQuestions);
-
+router.route('/:questionId').get(protect, getQuestionById);
 router.put(
   '/questions/:questionId',
   [

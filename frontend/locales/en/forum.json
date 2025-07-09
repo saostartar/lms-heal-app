@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "title": "Community Forums",
+    "description": "Join discussions, ask questions, and connect with others in our learning community",
+    "categoriesCount": "Discussion Categories"
+  },
+  "loading": {
+    "categories": "Loading forum categories..."
+  },
+  "error": {
+    "title": "Unable to Load Forums",
+    "retry": "Retry"
+  },
+  "category": {
+    "topics": "Topics",
+    "viewDiscussions": "View Discussions"
+  },
+  "emptyState": {
+    "title": "No Categories Yet",
+    "description": "Forum categories will appear here once they're created",
+    "action": "Request a Category"
+  }
+}

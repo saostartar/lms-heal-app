@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../../lib/context/auth-context';
+import { useLanguage } from '../../../lib/context/LanguageContext';
 import Header from '../../../components/layout/header';
 import Footer from '../../../components/layout/footer';
 
 export default function Register() {
+  const { currentLanguage } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,7 +17,25 @@ export default function Register() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [t, setT] = useState({});
   const { register } = useAuth();
+
+  // Load translations
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../../locales/${currentLanguage}/register.json`);
+        setT(translations.default);
+      } catch (error) {
+        console.error('Error loading register translations:', error);
+        // Fallback to English if translation fails
+        const fallback = await import('../../../locales/en/register.json');
+        setT(fallback.default);
+      }
+    };
+
+    loadTranslations();
+  }, [currentLanguage]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,11 +56,24 @@ export default function Register() {
         setError(message);
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(t.errors?.generic || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Return loading state if translations aren't loaded yet
+  if (!t.page) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <Header />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -54,10 +87,10 @@ export default function Register() {
           {/* Page heading and subheading */}
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-              Join Our Learning Platform
+              {t.page.title}
             </h2>
             <p className="mt-3 text-center text-gray-600">
-              Create your account and start learning today
+              {t.page.subtitle}
             </p>
           </div>
           
@@ -75,7 +108,7 @@ export default function Register() {
               {/* Full Name Field */}
               <div className="space-y-2">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Full Name
+                  {t.form.name.label}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -90,7 +123,7 @@ export default function Register() {
                     autoComplete="name"
                     required
                     className="form-input pl-10 w-full text-black"
-                    placeholder="John Doe"
+                    placeholder={t.form.name.placeholder}
                     value={formData.name}
                     onChange={handleChange}
                   />
@@ -100,7 +133,7 @@ export default function Register() {
               {/* Email Field */}
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email Address
+                  {t.form.email.label}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -116,7 +149,7 @@ export default function Register() {
                     autoComplete="email"
                     required
                     className="form-input pl-10 w-full text-black"
-                    placeholder="your@email.com"
+                    placeholder={t.form.email.placeholder}
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -126,7 +159,7 @@ export default function Register() {
               {/* Password Field */}
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
+                  {t.form.password.label}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -141,7 +174,7 @@ export default function Register() {
                     autoComplete="new-password"
                     required
                     className="form-input pl-10 w-full text-black"
-                    placeholder="••••••••"
+                    placeholder={t.form.password.placeholder}
                     value={formData.password}
                     onChange={handleChange}
                   />
@@ -151,7 +184,7 @@ export default function Register() {
               {/* Role Selector */}
               <div className="space-y-2">
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                  I want to join as
+                  {t.form.role.label}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
@@ -171,8 +204,8 @@ export default function Register() {
                       paddingRight: '2.5rem'
                     }}
                   >
-                    <option value="learner">Learner</option>
-                    <option value="instructor">Instructor</option>
+                    <option value="learner">{t.form.role.options.learner}</option>
+                    <option value="instructor">{t.form.role.options.instructor}</option>
                   </select>
                 </div>
               </div>
@@ -202,11 +235,11 @@ export default function Register() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Creating account...
+                      {t.form.submitButton.loading}
                     </div>
                   ) : (
                     <span className="flex items-center justify-center">
-                      Create account
+                      {t.form.submitButton.default}
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-all" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
@@ -221,7 +254,7 @@ export default function Register() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Already have an account?</span>
+                  <span className="px-2 bg-white text-gray-500">{t.divider.text}</span>
                 </div>
               </div>
 
@@ -234,7 +267,7 @@ export default function Register() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Sign in to your existing account
+                  {t.footer.signInLink}
                 </Link>
               </div>
             </form>
@@ -248,7 +281,7 @@ export default function Register() {
                   <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                 </svg>
               </div>
-              <span className="text-sm text-gray-700">Access to all courses</span>
+              <span className="text-sm text-gray-700">{t.benefits.courseAccess}</span>
             </div>
             <div className="flex flex-col items-center md:items-start">
               <div className="bg-secondary-100 p-2 rounded-full mb-2">
@@ -256,7 +289,7 @@ export default function Register() {
                   <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                 </svg>
               </div>
-              <span className="text-sm text-gray-700">Progress tracking</span>
+              <span className="text-sm text-gray-700">{t.benefits.progressTracking}</span>
             </div>
             <div className="flex flex-col items-center md:items-start">
               <div className="bg-green-100 p-2 rounded-full mb-2">
@@ -264,7 +297,7 @@ export default function Register() {
                   <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-sm text-gray-700">Certified completion</span>
+              <span className="text-sm text-gray-700">{t.benefits.certification}</span>
             </div>
           </div>
         </div>

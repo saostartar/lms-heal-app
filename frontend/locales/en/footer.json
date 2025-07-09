@@ -1,0 +1,40 @@
+{
+  "brand": {
+    "title": "HEAL Student",
+    "subtitle": "Health • Emotion • Active Living",
+    "description": "A free online psychology-based course platform to help you gain knowledge about psychological health, mental health, and balanced nutrition for a healthier lifestyle."
+  },
+  "social": {
+    "followUs": "Follow Us:"
+  },
+  "quickLinks": {
+    "title": "Quick Links",
+    "home": "Home",
+    "courses": "Courses",
+    "forum": "Discussion Forum",
+    "news": "Health News",
+    "about": "About Us",
+    "faq": "FAQ"
+  },
+  "programs": {
+    "title": "Programs & Support",
+    "freeCourses": "Free Courses",
+    "consultation": "Online Consultation",
+    "weeklySession": "Weekly Zoom Sessions",
+    "helpCenter": "Help Center",
+    "contactMentor": "Contact Mentor",
+    "privacy": "Privacy Policy"
+  },
+  "stats": {
+    "availableCourses": "Available Courses",
+    "freeCourses": "100% Free"
+  },
+  "legal": {
+    "copyright": "HEAL Student. All rights reserved.",
+    "platformSubtitle": "Holistic Health Platform for Future Generations",
+    "terms": "Terms & Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy"
+  },
+  "backToTop": "Back to top"
+}

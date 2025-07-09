@@ -1,0 +1,141 @@
+{
+  "hero": {
+    "sectionLabel": "HEAL STUDENT FAQ",
+    "title": "Pertanyaan yang Sering Diajukan",
+    "description": "Temukan jawaban untuk pertanyaan umum tentang program HEAL Student dan cara memulai perjalanan kesehatan holistik Anda."
+  },
+  "faqData": [
+    {
+      "id": 1,
+      "question": "Apa itu HEAL Student: Health, Emotion, and Active Living?",
+      "answer": {
+        "intro": "HEAL Student diciptakan oleh para peneliti dari USA, Malaysia dan Indonesia dengan tujuan untuk memberikan kursus secara gratis kepada para pengguna internet.",
+        "coverage": "Kursus yang diberikan mencakup psikologi, kesehatan mental, dan gizi yang seimbang.",
+        "background": {
+          "title": "Latar Belakang:",
+          "content": "Platform ini didasarkan pada jumlah angka obesitas yang kian meningkat di Asia Timur yang terjadi khususnya pada remaja."
+        },
+        "countries": {
+          "usa": "USA",
+          "malaysia": "Malaysia",
+          "indonesia": "Indonesia"
+        },
+        "subjects": {
+          "psychology": "psikologi",
+          "mentalHealth": "kesehatan mental",
+          "nutrition": "gizi yang seimbang"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "question": "Siapa saja yang dapat berpartisipasi dalam program kursus gratis ini?",
+      "answer": {
+        "intro": "Program kursus gratis ini terbuka secara umum bagi siapa saja. Akses untuk HEAL Student juga sangat mudah sehingga semua orang dapat mengaksesnya.",
+        "expertNote": {
+          "title": "Fasilitator kami berasal dari para ahli di bidangnya",
+          "content": "sehingga platform ini cukup aman dan terpercaya."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "question": "Bagaimana program ini disampaikan?",
+      "answer": {
+        "intro": "Program ini dilaunching secara umum dan memiliki beberapa kursus di dalamnya.",
+        "schedule": {
+          "title": "Jadwal",
+          "content": "Keenam kursus dibuka setiap 3 minggu"
+        },
+        "language": {
+          "title": "Bahasa",
+          "content": "Tersedia dalam 2 bahasa: Indonesia & Inggris"
+        },
+        "support": {
+          "title": "Dukungan",
+          "content": "Kami menyediakan mentor atau fasilitator untuk membantu pembelajaran Anda"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "question": "Topik apa saja yang dibahas?",
+      "answer": {
+        "intro": "HEAL Student menawarkan 6 kursus komprehensif yang dirancang untuk memberikan pemahaman holistik tentang kesehatan:",
+        "courses": [
+          {
+            "num": 1,
+            "title": "Pengenalan Terhadap Gizi Seimbang dan Pola Makan",
+            "icon": "🥗"
+          },
+          {
+            "num": 2,
+            "title": "Pengenalan Terhadap Psikologi",
+            "icon": "🧠"
+          },
+          {
+            "num": 3,
+            "title": "Pengenalan Terhadap Kesehatan Mental",
+            "icon": "💚"
+          },
+          {
+            "num": 4,
+            "title": "Mensinergikan Kesehatan Fisik dan Mental",
+            "icon": "⚖️"
+          },
+          {
+            "num": 5,
+            "title": "Implementasi Kesehatan Fisik dan Mental",
+            "icon": "🎯"
+          },
+          {
+            "num": 6,
+            "title": "Evaluasi Kesehatan Fisik dan Mental",
+            "icon": "📊"
+          }
+        ],
+        "courseLabel": "Kursus"
+      }
+    },
+    {
+      "id": 5,
+      "question": "Berapa biaya untuk berpartisipasi?",
+      "answer": {
+        "free": "100% GRATIS",
+        "noHiddenCosts": "Tidak ada biaya tersembunyi!",
+        "features": [
+          "4-5 jam per kursus",
+          "Implementasi praktis"
+        ],
+        "implementation": "Anda dapat mengikuti seluruh program dan mengimplementasikannya dalam kegiatan sehari-hari tanpa dipungut biaya apapun."
+      }
+    },
+    {
+      "id": 6,
+      "question": "Dukungan apa saja yang tersedia bagi pengguna selama program berlangsung?",
+      "answer": {
+        "intro": "Kami berkomitmen memberikan dukungan penuh kepada setiap peserta program:",
+        "supports": [
+          {
+            "title": "Panduan Akses Program",
+            "content": "Pelanggan yang telah mendaftar akan mendapatkan panduan lengkap untuk mengakses program dan kursus."
+          },
+          {
+            "title": "Mentor Profesional",
+            "content": "Kami menyediakan mentor ahli di bidangnya untuk mendampingi perjalanan belajar Anda."
+          },
+          {
+            "title": "Pertemuan Zoom Mingguan",
+            "content": "Peserta dapat mengikuti pertemuan Zoom setiap minggu untuk mengajukan pertanyaan atau membutuhkan bantuan mengenai permasalahan yang berkaitan dengan kesehatan psikologi, kesehatan mental, dan gizi yang seimbang."
+          }
+        ]
+      }
+    }
+  ],
+  "cta": {
+    "title": "Masih Ada Pertanyaan?",
+    "description": "Tim kami siap membantu Anda. Hubungi kami atau bergabunglah dengan komunitas HEAL Student untuk mendapatkan dukungan lebih lanjut.",
+    "registerButton": "Daftar Sekarang - Gratis",
+    "coursesButton": "Lihat Kursus Tersedia"
+  }
+}

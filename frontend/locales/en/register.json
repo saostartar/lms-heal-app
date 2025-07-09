@@ -1,0 +1,45 @@
+{
+  "page": {
+    "title": "Join Our Learning Platform",
+    "subtitle": "Create your account and start learning today"
+  },
+  "form": {
+    "name": {
+      "label": "Full Name",
+      "placeholder": "John Doe"
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "your@email.com"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "••••••••"
+    },
+    "role": {
+      "label": "I want to join as",
+      "options": {
+        "learner": "Learner",
+        "instructor": "Instructor"
+      }
+    },
+    "submitButton": {
+      "default": "Create account",
+      "loading": "Creating account..."
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again."
+  },
+  "divider": {
+    "text": "Already have an account?"
+  },
+  "footer": {
+    "signInLink": "Sign in to your existing account"
+  },
+  "benefits": {
+    "courseAccess": "Access to all courses",
+    "progressTracking": "Progress tracking",
+    "certification": "Certified completion"
+  }
+}

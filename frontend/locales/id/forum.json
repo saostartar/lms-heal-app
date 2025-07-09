@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "title": "Forum Komunitas",
+    "description": "Bergabunglah dalam diskusi, ajukan pertanyaan, dan terhubung dengan orang lain dalam komunitas belajar kami",
+    "categoriesCount": "Kategori Diskusi"
+  },
+  "loading": {
+    "categories": "Memuat kategori forum..."
+  },
+  "error": {
+    "title": "Tidak Dapat Memuat Forum",
+    "retry": "Coba Lagi"
+  },
+  "category": {
+    "topics": "Topik",
+    "viewDiscussions": "Lihat Diskusi"
+  },
+  "emptyState": {
+    "title": "Belum Ada Kategori",
+    "description": "Kategori forum akan muncul di sini setelah dibuat",
+    "action": "Minta Kategori"
+  }
+}

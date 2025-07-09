@@ -1,68 +1,47 @@
-'use client';
+import axios from '@/lib/axios';
+import EditQuestionClient from './edit-question-client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import axios from '../../../../../../../../../../../../lib/axios';
-import QuestionForm from '../../../../../../../../../../../../components/instructor/QuestionForm';
+// Fungsi ini memberitahu Next.js semua kombinasi path yang ada
+export async function generateStaticParams() {
+  try {
+    // Panggil endpoint baru yang efisien untuk mendapatkan semua path sekaligus
+    const response = await axios.get('/api/courses/all-paths-for-static-gen');
+    const allParams = response.data.data;
 
-export default function EditQuestion({ params }) {
-  const { courseId, moduleId, quizId, questionId } = params;
-  const router = useRouter();
-  const [question, setQuestion] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    if (!Array.isArray(allParams) || allParams.length === 0) {
+      console.warn("generateStaticParams (Questions) tidak menghasilkan path. Periksa endpoint /api/courses/all-paths-for-static-gen dan pastikan ada data di database.");
+      return [];
+    }
 
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(`/api/quizzes/questions/${questionId}`);
-        setQuestion(data.data);
-      } catch (err) {
-        setError('Failed to load question: ' + (err.response?.data?.message || err.message));
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    return allParams;
+  } catch (error) {
+    console.error("Gagal membuat static params untuk edit-question:", error.response?.data?.message || error.message);
+    return [];
+  }
+}
 
-    fetchQuestion();
-  }, [questionId]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-      </div>
-    );
+// Fungsi ini mengambil data untuk satu pertanyaan spesifik saat build
+async function getQuestionData(questionId) {
+  // 'create' adalah kasus khusus, tidak perlu fetch data
+  if (questionId === 'create') {
+    return null;
   }
 
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
+  try {
+    // Endpoint ini sudah benar dari perbaikan sebelumnya
+    const { data } = await axios.get(`/api/questions/${questionId}`);
+    return data.data;
+  } catch (error) {
+    console.error(`Gagal mengambil data untuk question ${questionId}:`, error.response?.data?.message || error.message);
+    return null;
   }
+}
 
-  if (!question) {
-    return <div className="text-center">Question not found</div>;
-  }
+// Ini adalah Server Component
+export default async function EditQuestionPage({ params }) {
+  const { questionId } = params;
+  const question = await getQuestionData(questionId);
 
-  return (
-    <div>
-      <div className="flex items-center mb-6">
-        <Link href={`/instructor/courses/${courseId}/modules/${moduleId}/quizzes/${quizId}`} className="text-primary-600 hover:underline mb-2 inline-block">
-          &larr; Back to quiz
-        </Link>
-      </div>
-      
-      <h1 className="text-2xl font-bold mb-6">Edit Question</h1>
-      
-      <QuestionForm 
-        courseId={courseId} 
-        moduleId={moduleId} 
-        quizId={quizId} 
-        initialData={question}
-        onError={setError}
-      />
-    </div>
-  );
+  // Render Client Component dengan data awal
+  return <EditQuestionClient initialQuestion={question} params={params} />;
 }

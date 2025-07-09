@@ -12,24 +12,38 @@ export default function CourseForm({ initialData = null }) {
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    title: initialData?.title || "",
-    description: initialData?.description || "",
-    category: initialData?.category || "other",
-    level: initialData?.level || "beginner",
-    requirePreTest: initialData?.requirePreTest || false,
-    isPublished: initialData?.isPublished !== undefined ? initialData.isPublished : true,
-    tags: initialData?.tags || [],
+    title: "",
+    description: "",
+    category: "gizi",
+    level: "beginner",
+    duration: "",
+    requirePreTest: false,
+    isPublished: true,
+    tags: [],
   });
   
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState(null);
   const [removeThumbnail, setRemoveThumbnail] = useState(false);
-  const [tagsInput, setTagsInput] = useState(''); // Separate state for tags input field
+  const [tagsInput, setTagsInput] = useState('');
+
+  // Available categories - pastikan sesuai dengan enum di model
+  const categories = [
+    { value: 'psikologi', label: 'Psikologi' },
+    { value: 'mental', label: 'Mental Health' },
+    { value: 'gizi', label: 'Gizi & Nutrisi' }
+  ];
+
+  // Available levels
+  const levels = [
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' }
+  ];
 
   useEffect(() => {
     if (initialData) {
-      // Parse tags from initialData
       const tagsValue = Array.isArray(initialData.tags) 
         ? initialData.tags.join(", ") 
         : "";
@@ -37,12 +51,15 @@ export default function CourseForm({ initialData = null }) {
       setFormData({
         title: initialData.title || "",
         description: initialData.description || "",
-        category: initialData.category || "other",
+        category: initialData.category || "gizi",
         level: initialData.level || "beginner",
+        duration: initialData.duration ? String(initialData.duration) : "",
+        requirePreTest: initialData.requirePreTest || false,
+        isPublished: initialData.isPublished !== undefined ? initialData.isPublished : true,
         tags: Array.isArray(initialData.tags) ? initialData.tags : [],
       });
       
-      setTagsInput(tagsValue); // Set tags input field
+      setTagsInput(tagsValue);
       setCurrentThumbnailUrl(initialData.thumbnailUrl || null);
       setThumbnailPreview(initialData.thumbnailUrl || null);
     }
@@ -109,19 +126,62 @@ export default function CourseForm({ initialData = null }) {
     }));
   };
 
+  const validateForm = () => {
+    const errors = [];
+
+    if (!formData.title.trim()) {
+      errors.push("Title is required");
+    }
+
+    if (!formData.description.trim()) {
+      errors.push("Description is required");
+    }
+
+    if (!categories.find(cat => cat.value === formData.category)) {
+      errors.push("Invalid category selected");
+    }
+
+    if (!levels.find(level => level.value === formData.level)) {
+      errors.push("Invalid level selected");
+    }
+
+    if (formData.duration && (isNaN(formData.duration) || parseInt(formData.duration) <= 0)) {
+      errors.push("Duration must be a positive number");
+    }
+
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
+    // Validate form
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setError(validationErrors.join(", "));
+      setLoading(false);
+      return;
+    }
+
     const submissionData = new FormData();
-    submissionData.append("title", formData.title);
-    submissionData.append("description", formData.description);
+    submissionData.append("title", formData.title.trim());
+    submissionData.append("description", formData.description.trim());
     submissionData.append("category", formData.category);
     submissionData.append("level", formData.level);
     
-    // Send tags as JSON string array directly from formData.tags which is already an array
+    // Pastikan duration adalah number atau kosong
+    if (formData.duration) {
+      submissionData.append("duration", parseInt(formData.duration));
+    }
+    
+    // Pastikan tags adalah array
     submissionData.append("tags", JSON.stringify(formData.tags));
+    
+    // Append boolean fields
+    submissionData.append("requirePreTest", formData.requirePreTest);
+    submissionData.append("isPublished", formData.isPublished);
 
     if (thumbnailFile) {
       submissionData.append("thumbnailImage", thumbnailFile);
@@ -154,14 +214,27 @@ export default function CourseForm({ initialData = null }) {
       router.push("/instructor/courses");
     } catch (err) {
       console.error("Error submitting course:", err);
-      const message =
-        err.response?.data?.message ||
-        err.message ||
-        (initialData?.id
+      
+      let errorMessage = "An error occurred.";
+      
+      if (err.response?.data?.errors) {
+        // Handle validation errors
+        const validationErrors = err.response.data.errors.map(error => 
+          `${error.path}: ${error.msg}`
+        ).join(", ");
+        errorMessage = `Validation errors: ${validationErrors}`;
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      } else {
+        errorMessage = initialData?.id
           ? "Failed to update course."
-          : "Failed to create course.");
-      setError(message);
-      toast.error(message);
+          : "Failed to create course.";
+      }
+      
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -189,7 +262,6 @@ export default function CourseForm({ initialData = null }) {
       )}
 
       <div className="p-8 space-y-8">
-        {/* Header Section */}
         <div className="text-center mb-6">
           <h3 className="text-xl font-bold text-primary-700">
             {initialData ? "Update Your Course" : "Create New Course"}
@@ -266,8 +338,8 @@ export default function CourseForm({ initialData = null }) {
           </p>
         </div>
 
-        {/* Category and Level */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Category, Level, and Duration */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="transition-all duration-300 hover:translate-x-1">
             <label
               htmlFor="category"
@@ -285,18 +357,21 @@ export default function CourseForm({ initialData = null }) {
                   d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                 />
               </svg>
-              Category
+              Category <span className="text-primary-500 ml-1">*</span>
             </label>
             <div className="relative">
               <select
                 id="category"
                 name="category"
+                required
                 className="text-black form-input w-full bg-white pl-3 pr-10 py-2 text-base focus:ring-2 focus:ring-primary-300 border-transparent shadow-md appearance-none"
                 value={formData.category}
                 onChange={handleChange}>
-                <option value="mental_health">Mental Health</option>
-                <option value="obesity">Obesity</option>
-                <option value="other">Other</option>
+                {categories.map((category) => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
@@ -332,18 +407,21 @@ export default function CourseForm({ initialData = null }) {
                   d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                 />
               </svg>
-              Difficulty Level
+              Difficulty Level <span className="text-primary-500 ml-1">*</span>
             </label>
             <div className="relative">
               <select
                 id="level"
                 name="level"
+                required
                 className="text-black form-input w-full bg-white pl-3 pr-10 py-2 text-base focus:ring-2 focus:ring-primary-300 border-transparent shadow-md appearance-none"
                 value={formData.level}
                 onChange={handleChange}>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                {levels.map((level) => (
+                  <option key={level.value} value={level.value}>
+                    {level.label}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
@@ -360,6 +438,38 @@ export default function CourseForm({ initialData = null }) {
                 </svg>
               </div>
             </div>
+          </div>
+
+          <div className="transition-all duration-300 hover:translate-x-1">
+            <label
+              htmlFor="duration"
+              className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-2 text-primary-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Duration (minutes)
+            </label>
+            <input
+              type="number"
+              id="duration"
+              name="duration"
+              min="1"
+              max="10000"
+              className="text-black form-input w-full bg-white focus:ring-2 focus:ring-primary-300 border-transparent shadow-md hover:shadow-lg transition-all"
+              value={formData.duration}
+              onChange={handleChange}
+              placeholder="e.g., 120"
+            />
           </div>
         </div>
 
@@ -453,6 +563,39 @@ export default function CourseForm({ initialData = null }) {
           <p className="text-xs text-gray-500 mt-1 italic">
             Tags help make your course more discoverable.
           </p>
+        </div>
+
+        {/* Additional Settings */}
+        <div className="transition-all duration-300 hover:translate-x-1">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="requirePreTest"
+                name="requirePreTest"
+                checked={formData.requirePreTest}
+                onChange={handleChange}
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label htmlFor="requirePreTest" className="ml-2 text-sm text-gray-700">
+                Require pre-test
+              </label>
+            </div>
+            
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isPublished"
+                name="isPublished"
+                checked={formData.isPublished}
+                onChange={handleChange}
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label htmlFor="isPublished" className="ml-2 text-sm text-gray-700">
+                Publish immediately
+              </label>
+            </div>
+          </div>
         </div>
 
         {/* Test setup information */}

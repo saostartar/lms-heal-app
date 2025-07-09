@@ -1,0 +1,131 @@
+{
+  "loading": {
+    "title": "Memuat Perjalanan Belajar Anda",
+    "subtitle": "Menyiapkan pengalaman kursus yang dipersonalisasi untuk Anda..."
+  },
+  "error": {
+    "title": "Ups! Terjadi kesalahan",
+    "tryAgain": "Coba Lagi",
+    "goBack": "Kembali"
+  },
+  "notFound": {
+    "title": "Kursus Tidak Ditemukan",
+    "message": "Kami tidak dapat menemukan kursus yang Anda cari. Mungkin telah dipindahkan atau dihapus.",
+    "backButton": "Kembali ke Kursus"
+  },
+  "navigation": {
+    "backToCatalog": "Kembali ke Katalog Kursus",
+    "backToJourney": "Perjalanan Belajar Saya"
+  },
+  "courseInfo": {
+    "categories": {
+      "mental_health": "Kesehatan Mental",
+      "obesity": "Manajemen Obesitas",
+      "nutrition": "Nutrisi & Wellness",
+      "default": "Pendidikan Kesehatan"
+    },
+    "levels": {
+      "beginner": "Pemula",
+      "intermediate": "Menengah", 
+      "advanced": "Lanjutan"
+    },
+    "duration": {
+      "minutes": "mnt",
+      "hours": "j"
+    }
+  },
+  "enrollment": {
+    "enrollButton": "Mulai Belajar Sekarang",
+    "enrollButtonShort": "Daftar Sekarang - Gratis",
+    "enrolling": "Mendaftar...",
+    "readyToTransform": "Siap Mentransformasi Pengetahuan Anda?",
+    "coursePreview": "Pratinjau Kursus"
+  },
+  "sections": {
+    "aboutCourse": {
+      "title": "Tentang Kursus Ini",
+      "duration": "Durasi",
+      "content": "Konten",
+      "audience": "Audiens",
+      "audienceValue": "Tenaga Kesehatan Profesional",
+      "moduleText": "modul",
+      "lessonText": "pelajaran"
+    },
+    "courseContent": {
+      "title": "Konten Kursus",
+      "locked": "Terkunci",
+      "moreContent": "pelajaran lainnya"
+    },
+    "features": {
+      "lifetimeAccess": "Akses kursus seumur hidup",
+      "trackProgress": "Lacak kemajuan belajar Anda",
+      "assessments": "Penilaian pengetahuan & kuis",
+      "certificate": "Dapatkan sertifikat penyelesaian"
+    },
+    "knowledgeAssessment": {
+      "title": "Penilaian Pengetahuan",
+      "description": "Kursus ini mencakup penilaian pre dan post yang komprehensif untuk membantu Anda mengukur kemajuan belajar dan retensi pengetahuan secara efektif.",
+      "unlockMessage": "Daftar untuk membuka penilaian dan melacak kemajuan Anda"
+    }
+  },
+  "enrolled": {
+    "progress": {
+      "overall": "Progress Keseluruhan",
+      "modules": "Modul",
+      "lessons": "Pelajaran",
+      "duration": "Durasi", 
+      "completed": "Kursus Selesai!"
+    },
+    "moduleNavigation": {
+      "title": "Modul Kursus",
+      "lesson": "pelajaran",
+      "lessons": "pelajaran"
+    },
+    "assessments": {
+      "preTest": {
+        "title": "Penilaian Pre-Test",
+        "description": "Ukur tingkat pengetahuan Anda saat ini sebelum memulai perjalanan kursus.",
+        "button": "Mulai Pre-Test"
+      },
+      "postTest": {
+        "title": "Penilaian Post-Test",
+        "description": "Evaluasi kemajuan Anda dan ukur pengetahuan yang telah Anda peroleh.",
+        "button": "Mulai Post-Test"
+      },
+      "results": {
+        "title": "Hasil Penilaian",
+        "preScore": "Skor Pre-Test:",
+        "postScore": "Skor Post-Test:",
+        "improvement": "Peningkatan",
+        "viewDetails": "Lihat Hasil Detail"
+      }
+    },
+    "moduleContent": {
+      "selectModule": "Pilih Modul",
+      "selectDescription": "Pilih modul dari sidebar untuk menjelajahi konten dan pelajarannya.",
+      "viewAllLessons": "Lihat Semua Pelajaran",
+      "moduleLessons": "Pelajaran Modul",
+      "viewFullModule": "Lihat modul lengkap",
+      "noLessons": "Tidak Ada Pelajaran Tersedia",
+      "noLessonsDescription": "Modul ini belum memiliki pelajaran. Periksa kembali segera!",
+      "viewCompleteModule": "Lihat Modul Lengkap",
+      "continueProgress": "Lanjutkan kemajuan belajar Anda"
+    },
+
+    "instructor": {
+      "courseInstructor": "Instruktur Kursus"
+    },
+    
+    "lessonStatus": {
+      "completed": "Selesai",
+      "inProgress": "Sedang Berlangsung",
+      "timeSpent": "Waktu yang dihabiskan:",
+      "videoLesson": "Pelajaran Video",
+      "textLesson": "Pelajaran Teks"
+    },
+    "completion": {
+      "congratulations": "Selamat!",
+      "message": "Anda telah menyelesaikan pelajaran dengan sukses!"
+    }
+  }
+}

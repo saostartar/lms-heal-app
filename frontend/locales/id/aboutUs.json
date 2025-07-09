@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "sectionLabel": "TENTANG KAMI",
+    "title": "Tentang HEAL Student",
+    "description": "Platform global yang mewakili para konsultan ahli untuk memberikan pengetahuan terkait kesehatan psikologi, mental, dan gizi seimbang"
+  },
+  "content": {
+    "paragraph1": {
+      "brandName": "HEAL Student: Health, Emotion, and Active Living",
+      "description": "adalah platform global yang mewakili para konsultan ahli untuk memberikan penjelasan, pemahaman, dan pengetahuan terkait pentingnya kesehatan psikologi, kesehatan mental, dan gizi seimbang bagi tubuh dalam mengatur pola hidup yang sehat."
+    },
+    "paragraph2": {
+      "description": "Platform ini didirikan oleh para peneliti dari beberapa negara",
+      "countries": "(USA, Malaysia, dan Indonesia)",
+      "collaboration": "yang ahli dalam bidangnya. Kami juga bekerjasama dengan para pelaku usaha di bidang industri, startup, serta para profesional di bidang kesehatan dan fisik untuk mengembangkan program kursus gratis ini."
+    }
+  },
+  "team": {
+    "sectionLabel": "TIM AHLI KAMI",
+    "title": "Temui Tim Ahli Kami",
+    "description": "Platform kursus online gratis ini dipimpin oleh para peneliti dan fasilitator yang ahli dalam bidangnya.",
+    "expertBadge": "Instruktur Ahli"
+  },
+  "philosophy": {
+    "quote": "DI DALAM TUBUH YANG SEHAT TERDAPAT JIWA YANG SEHAT",
+    "attribution": "DECIMUS IUNIUS JUVENALIS"
+  },
+  "contact": {
+    "sectionLabel": "HUBUNGI KAMI",
+    "title": "Kontak",
+    "leadTitle": "Peneliti Utama & Koordinator Platform"
+  },
+  "cta": {
+    "title": "Siap Memulai Perjalanan Belajar Anda?",
+    "description": "Bergabunglah dengan ribuan peserta lainnya dalam program kursus gratis kami",
+    "viewCourses": "Lihat Kursus",
+    "registerNow": "Daftar Sekarang"
+  },
+  "instructors": {
+    "countries": {
+      "usa": "USA",
+      "malaysia": "Malaysia",
+      "indonesia": "Indonesia"
+    }
+  }
+}

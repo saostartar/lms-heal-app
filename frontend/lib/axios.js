@@ -10,15 +10,21 @@ const instance = axios.create({
 // Add a request interceptor to add the auth token
 instance.interceptors.request.use(
   (config) => {
-    // Check if we're in the browser and we have a token
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    let token;
+
+    // Cek jika kode berjalan di SERVER (saat build)
+    if (typeof window === 'undefined') {
+      token = process.env.API_AUTH_TOKEN;
     }
-    
+    // Cek jika kode berjalan di BROWSER (client-side)
+    else {
+      token = localStorage.getItem('token');
+    }
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -26,21 +32,23 @@ instance.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle token expiration
+// Add a response interceptor to handle token expiration (hanya untuk client-side)
 instance.interceptors.response.use(
   (response) => {
     return response;
   },
   async (error) => {
-    // Handle 401 errors
+    // Penanganan error 401 hanya perlu dilakukan di browser untuk redirect
     if (error.response && error.response.status === 401) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
+        // Redirect ke halaman login jika token tidak valid/kadaluarsa
         window.location.href = '/login?session=expired';
       }
     }
     
-    console.error('API Error:', error.response?.data || error.message);
+    // Log error untuk debugging di server dan client
+    console.error('API Error:', error.response?.data?.message || error.message);
     return Promise.reject(error);
   }
 );

@@ -71,34 +71,43 @@ app.use('/api/forum', forumRoutes);
 app.use(errorHandler);
 
 // Start server after database connection
-// Start server after database connection
 const startServer = async () => {
   try {
-    // Test database connection without syncing models
+    // Test database connection
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     
-    // Only sync database models in development, and with safer options
-    if (process.env.NODE_ENV === 'development') {
-      try {
-        // Use alter:true instead of force:true for a safer update
-        // This will update tables to match models without dropping data
-        await sequelize.sync({ alter: true });
-        console.log('Database models synchronized successfully.');
-      } catch (error) {
-        console.error('Error synchronizing database models:', error);
-        process.exit(1);
-      }
+    // Sync database models
+    try {
+      // Use force: true to drop and recreate tables
+      // WARNING: This will delete all existing data
+      // await sequelize.sync({ force: true });
+
+      // Or use alter: true to modify existing tables without dropping
+      await sequelize.sync();
+      
+      console.log('Database models synchronized successfully.');
+    } catch (syncError) {
+      console.error('Error synchronizing database models:', syncError);
+      process.exit(1);
     }
     
     // Start the server
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
+      console.log("Database synchronized successfully");
+      // scheduleReminderJobs(); // Uncomment if you have reminder jobs
     });
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-    process.exit(1); // Exit process with failure
+    process.exit(1);
   }
 };
 
-startServer();
+
+
+// ...existing code...
+// Execute the async function immediately
+(async () => {
+  await startServer();
+})();

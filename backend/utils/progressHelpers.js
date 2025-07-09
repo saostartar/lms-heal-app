@@ -3,106 +3,151 @@ const { Module, Lesson, LessonProgress, ModuleProgress, Enrollment, Course } = d
 
 // Helper function untuk update status modul progress
 export const updateModuleProgressStatus = async (userId, moduleId) => {
-  const module = await Module.findByPk(moduleId, {
-    include: [{ model: Lesson }]
-  });
-
-  if (!module) return;
-
-  // Ambil progress semua lesson dalam modul
-  const lessonProgressList = await LessonProgress.findAll({
-    where: {
-      userId,
-      lessonId: module.Lessons.map(lesson => lesson.id)
-    }
-  });
-
-  // Cari atau buat module progress
-  let moduleProgress = await ModuleProgress.findOne({
-    where: {
-      userId,
-      moduleId
-    }
-  });
-
-  if (!moduleProgress) {
-    moduleProgress = await ModuleProgress.create({
-      userId,
-      moduleId
+  try {
+    const module = await Module.findByPk(moduleId, {
+      include: [{ model: Lesson }]
     });
+
+    if (!module) {
+      console.log('Module not found:', moduleId);
+      return;
+    }
+
+    console.log(`Updating module progress for module ${moduleId}, user ${userId}`);
+
+    // Ambil progress semua lesson dalam modul
+    const lessonProgressList = await LessonProgress.findAll({
+      where: {
+        userId,
+        lessonId: module.Lessons.map(lesson => lesson.id)
+      }
+    });
+
+    console.log(`Found ${lessonProgressList.length} lesson progress records out of ${module.Lessons.length} lessons`);
+
+    // Cari atau buat module progress
+    let moduleProgress = await ModuleProgress.findOne({
+      where: {
+        userId,
+        moduleId
+      }
+    });
+
+    if (!moduleProgress) {
+      moduleProgress = await ModuleProgress.create({
+        userId,
+        moduleId,
+        status: 'not_started',
+        progress: 0
+      });
+      console.log('Created new module progress record');
+    }
+
+    // Hitung persentase progress
+    const totalLessons = module.Lessons.length;
+    const completedLessons = lessonProgressList.filter(lp => lp.status === 'completed').length;
+    const inProgressLessons = lessonProgressList.filter(lp => lp.status === 'in_progress').length;
+    
+    const progressPercentage = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
+    
+    console.log(`Module progress calculation: ${completedLessons}/${totalLessons} completed = ${progressPercentage}%`);
+    
+    // Update status modul
+    let status = 'not_started';
+    if (completedLessons === totalLessons && totalLessons > 0) {
+      status = 'completed';
+    } else if (completedLessons > 0 || inProgressLessons > 0) {
+      status = 'in_progress';
+    }
+
+    // Update data
+    const updateData = {
+      status,
+      progress: progressPercentage,
+      lastAccessedAt: new Date()
+    };
+
+    if (status === 'completed' && moduleProgress.status !== 'completed') {
+      updateData.completedAt = new Date();
+      console.log('Module completed, setting completedAt');
+    } else if (status !== 'completed') {
+      updateData.completedAt = null;
+    }
+
+    await moduleProgress.update(updateData);
+    console.log(`Module progress updated: status=${status}, progress=${progressPercentage}%`);
+  } catch (error) {
+    console.error('Error updating module progress:', error);
+    throw error;
   }
-
-  // Hitung persentase progress
-  const totalLessons = module.Lessons.length;
-  const completedLessons = lessonProgressList.filter(lp => lp.status === 'completed').length;
-  const inProgressLessons = lessonProgressList.filter(lp => lp.status === 'in_progress').length;
-  
-  const progressPercentage = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
-  
-  // Update status modul
-  let status = 'not_started';
-  if (completedLessons === totalLessons && totalLessons > 0) {
-    status = 'completed';
-  } else if (completedLessons > 0 || inProgressLessons > 0) {
-    status = 'in_progress';
-  }
-
-  // Update data
-  const updateData = {
-    status,
-    progress: progressPercentage,
-    lastAccessedAt: new Date()
-  };
-
-  if (status === 'completed' && moduleProgress.status !== 'completed') {
-    updateData.completedAt = new Date();
-  }
-
-  await moduleProgress.update(updateData);
 };
 
 // Helper function untuk update progress enrollment
 export const updateEnrollmentProgress = async (userId, courseId) => {
-  const course = await Course.findByPk(courseId, {
-    include: [{ model: Module }]
-  });
+  try {
+    const course = await Course.findByPk(courseId, {
+      include: [{ model: Module }]
+    });
 
-  if (!course) return;
-
-  // Ambil progress semua modul dalam kursus
-  const moduleProgressList = await ModuleProgress.findAll({
-    where: {
-      userId,
-      moduleId: course.Modules.map(module => module.id)
+    if (!course) {
+      console.log('Course not found:', courseId);
+      return;
     }
-  });
 
-  // Ambil enrollment
-  const enrollment = await Enrollment.findOne({
-    where: {
-      userId,
-      courseId
+    console.log(`Updating enrollment progress for course ${courseId}, user ${userId}`);
+
+    // Ambil progress semua modul dalam kursus
+    const moduleProgressList = await ModuleProgress.findAll({
+      where: {
+        userId,
+        moduleId: course.Modules.map(module => module.id)
+      }
+    });
+
+    console.log(`Found ${moduleProgressList.length} module progress records out of ${course.Modules.length} modules`);
+
+    // Ambil enrollment
+    const enrollment = await Enrollment.findOne({
+      where: {
+        userId,
+        courseId
+      }
+    });
+
+    if (!enrollment) {
+      console.log('Enrollment not found');
+      return;
     }
-  });
 
-  if (!enrollment) return;
+    // Hitung persentase progress berdasarkan modul yang ada
+    const totalModules = course.Modules.length;
+    const completedModules = moduleProgressList.filter(mp => mp.status === 'completed').length;
+    
+    // Hitung rata-rata progress dari semua modul
+    const totalModuleProgress = moduleProgressList.reduce((sum, mp) => sum + (mp.progress || 0), 0);
+    const progressPercentage = totalModules > 0 ? totalModuleProgress / totalModules : 0;
+    
+    console.log(`Enrollment progress calculation: ${completedModules}/${totalModules} modules completed, average progress: ${progressPercentage}%`);
+    
+    // Update data enrollment
+    const updateData = {
+      progress: progressPercentage,
+      lastAccessedAt: new Date()
+    };
 
-  // Hitung persentase progress
-  const totalModules = course.Modules.length;
-  const completedModules = moduleProgressList.filter(mp => mp.status === 'completed').length;
-  
-  const progressPercentage = totalModules > 0 ? (completedModules / totalModules) * 100 : 0;
-  
-  // Update data enrollment
-  const updateData = {
-    progress: progressPercentage,
-    lastAccessedAt: new Date()
-  };
+    if (completedModules === totalModules && totalModules > 0) {
+      updateData.isCompleted = true;
+      updateData.completionDate = new Date();
+      console.log('Course completed, setting isCompleted=true');
+    } else {
+      updateData.isCompleted = false;
+      updateData.completionDate = null;
+    }
 
-  if (completedModules === totalModules && totalModules > 0) {
-    updateData.isCompleted = true;
-    updateData.completionDate = new Date();
+    await enrollment.update(updateData);
+    console.log(`Enrollment progress updated: progress=${progressPercentage}%, isCompleted=${updateData.isCompleted}`);
+  } catch (error) {
+    console.error('Error updating enrollment progress:', error);
+    throw error;
   }
-
-  await enrollment.update(updateData);
 };

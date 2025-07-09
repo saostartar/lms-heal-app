@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "courses": "Kursus",
+    "forum": "Forum",
+    "news": "Berita",
+    "faq": "FAQ",
+    "about": "Tentang Kami",
+    "login": "Masuk",
+    "register": "Daftar",
+    "profile": "Profil Saya",
+    "settings": "Pengaturan",
+    "logout": "Keluar"
+  },
+  "hero": {
+    "welcome": "Selamat datang di",
+    "title": "HEAL Student",
+    "subtitle": "Health, Emotion, and Active Living",
+    "description": "Program Kursus Gratis Berbasis Psikologi, Kesehatan Mental, dan Gizi yang Seimbang.",
+    "cta": "Lihat Program Kursus",
+    "platform": "Platform Kesehatan Holistik"
+  },
+  "courses": {
+    "title": "Program Kursus Gratis Kami",
+    "description": "Platform HEAL Student menyediakan 6 kursus yang dipimpin oleh fasilitator ahli selama 90 menit secara online.",
+    "available": "Kursus yang Tersedia",
+    "searchPlaceholder": "Cari kursus...",
+    "category": "Kategori",
+    "allCategories": "Semua Kategori",
+    "level": "Tingkat Kesulitan",
+    "allLevels": "Semua Tingkat",
+    "applyFilter": "Terapkan Filter",
+    "noCoursesFound": "Tidak ada kursus ditemukan",
+    "noCoursesDescription": "Kami tidak menemukan kursus yang sesuai dengan kriteria pencarian Anda. Coba sesuaikan filter pencarian.",
+    "startLearning": "Mulai Belajar",
+    "continueReading": "Lanjutkan Membaca",
+    "enrollNow": "Daftar Sekarang - Gratis",
+    "alreadyAccount": "Sudah Punya Akun? Masuk"
+  },
+  "dashboard": {
+    "learningJourney": "Perjalanan Belajar Anda",
+    "trackProgress": "Lacak progress, lanjutkan pembelajaran, dan jelajahi kursus baru untuk memperluas pengetahuan kesehatan Anda.",
+    "learningProgress": "Progress Pembelajaran",
+    "progressVisualization": "Visualisasi kemajuan belajar Anda",
+    "allCourses": "Semua Kursus",
+    "inProgress": "Sedang Belajar",
+    "completed": "Selesai",
+    "notStarted": "Belum Dimulai",
+    "noCoursesRegistered": "Belum ada kursus yang terdaftar",
+    "browseDescription": "Jelajahi dan daftar kursus baru untuk memulai perjalanan belajar Anda.",
+    "browseCourses": "Jelajahi Kursus",
+    "readyToExpand": "Siap memperluas pengetahuan Anda?",
+    "findLatestCourses": "Temukan kursus kesehatan terbaru yang dirancang khusus untuk tenaga kesehatan profesional.",
+    "exploreNewCourses": "Jelajahi Kursus Baru",
+    "viewAchievements": "Lihat Pencapaian"
+  },
+  "footer": {
+    "description": "Platform kursus online gratis berbasis psikologi untuk membantu Anda mendapatkan pengetahuan tentang kesehatan psikologi, kesehatan mental, dan gizi seimbang untuk pola hidup yang lebih sehat.",
+    "followUs": "Ikuti Kami:",
+    "quickLinks": "Tautan Cepat",
+    "support": "Dukungan",
+    "legal": "Legal",
+    "copyright": "HEAL Student. Semua hak dilindungi.",
+    "platformSubtitle": "Platform Kesehatan Holistik untuk Generasi Masa Depan"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Kesalahan",
+    "success": "Berhasil",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "edit": "Edit",
+    "delete": "Hapus",
+    "confirm": "Konfirmasi",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "search": "Cari",
+    "filter": "Filter",
+    "sort": "Urutkan",
+    "loadingCourses": "Memuat kursus...",
+    "failedToLoad": "Gagal memuat kursus",
+    "tryAgain": "Coba Lagi",
+    "lastActive": "Terakhir aktif",
+    "completed": "Selesai",
+    "notStarted": "Belum dimulai",
+    "hours": "jam",
+    "minutes": "menit"
+  },
+  "categories": {
+    "psychology": "Psikologi",
+    "mental": "Kesehatan Mental",
+    "nutrition": "Gizi & Nutrisi"
+  },
+  "levels": {
+    "beginner": "Pemula",
+    "intermediate": "Menengah",
+    "advanced": "Lanjutan"
+  }
+}

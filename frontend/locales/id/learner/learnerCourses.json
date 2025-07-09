@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": {
+      "line1": "Temukan Jalur",
+      "line2": "Pembelajaran Anda"
+    },
+    "subtitle": "Jelajahi kursus pilihan kami yang dirancang untuk memajukan pengetahuan dan mentransformasi karir Anda.",
+    "searchPlaceholder": "Cari kursus..."
+  },
+  "filters": {
+    "title": "Filter Lanjutan",
+    "clearFilters": "Hapus Filter",
+    "category": "Kategori",
+    "level": "Level",
+    "all": "Semua"
+  },
+  "results": {
+    "title": "Kursus Tersedia",
+    "resultsCount": "hasil"
+  },
+  "loading": {
+    "text": "Memuat kursus..."
+  },
+  "errors": {
+    "title": "Ups! Terjadi kesalahan",
+    "loadFailed": "Gagal memuat kursus. Silakan coba lagi nanti."
+  },
+  "empty": {
+    "title": "Tidak ada kursus ditemukan",
+    "message": "Kami tidak dapat menemukan kursus yang sesuai dengan kriteria Anda. Coba sesuaikan filter atau periksa kembali nanti untuk konten baru."
+  },
+  "course": {
+    "viewButton": "Lihat Kursus"
+  },
+  "categories": {
+    "psikologi": "Psikologi",
+    "mental": "Kesehatan Mental",
+    "gizi": "Gizi"
+  },
+  "levels": {
+    "beginner": "Pemula",
+    "intermediate": "Menengah",
+    "advanced": "Lanjutan"
+  }
+}

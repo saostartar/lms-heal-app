@@ -1,0 +1,45 @@
+{
+  "page": {
+    "title": "Bergabung dengan Platform Pembelajaran Kami",
+    "subtitle": "Buat akun Anda dan mulai belajar hari ini"
+  },
+  "form": {
+    "name": {
+      "label": "Nama Lengkap",
+      "placeholder": "John Doe"
+    },
+    "email": {
+      "label": "Alamat Email",
+      "placeholder": "email@anda.com"
+    },
+    "password": {
+      "label": "Kata Sandi",
+      "placeholder": "••••••••"
+    },
+    "role": {
+      "label": "Saya ingin bergabung sebagai",
+      "options": {
+        "learner": "Pelajar",
+        "instructor": "Instruktur"
+      }
+    },
+    "submitButton": {
+      "default": "Buat akun",
+      "loading": "Membuat akun..."
+    }
+  },
+  "errors": {
+    "generic": "Terjadi kesalahan. Silakan coba lagi."
+  },
+  "divider": {
+    "text": "Sudah punya akun?"
+  },
+  "footer": {
+    "signInLink": "Masuk ke akun yang sudah ada"
+  },
+  "benefits": {
+    "courseAccess": "Akses ke semua kursus",
+    "progressTracking": "Pelacakan progress",
+    "certification": "Sertifikat penyelesaian"
+  }
+}

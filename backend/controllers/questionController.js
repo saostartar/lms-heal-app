@@ -276,6 +276,29 @@ export const deleteQuestion = async (req, res, next) => {
   }
 };
 
+export const getQuestionById = async (req, res, next) => {
+  try {
+    const { questionId } = req.params;
+    const question = await Question.findByPk(questionId, {
+      include: [{ model: Option, order: [['position', 'ASC']] }]
+    });
+
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: 'Question not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: question
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Add an option to a question
 export const addOption = async (req, res, next) => {
   try {

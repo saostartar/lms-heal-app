@@ -1,19 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../../lib/context/auth-context';
+import { useLanguage } from '../../../lib/context/LanguageContext';
 import Header from '../../../components/layout/header';
 import Footer from '../../../components/layout/footer';
 
 export default function Login() {
+  const { currentLanguage } = useLanguage();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [t, setT] = useState({});
   const { login } = useAuth();
+
+  // Load translations
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../../locales/${currentLanguage}/login.json`);
+        setT(translations.default);
+      } catch (error) {
+        console.error('Error loading login translations:', error);
+        // Fallback to English if translation fails
+        const fallback = await import('../../../locales/en/login.json');
+        setT(fallback.default);
+      }
+    };
+
+    loadTranslations();
+  }, [currentLanguage]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,11 +54,24 @@ export default function Login() {
         setError(message);
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(t.errors?.generic || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Return loading state if translations aren't loaded yet
+  if (!t.page) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Header />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -52,10 +85,10 @@ export default function Login() {
         <div className="max-w-md w-full space-y-8 relative z-10">
           <div className="text-center">
             <h2 className="mt-6 text-4xl font-extrabold text-gray-900 tracking-tight">
-              Welcome back
+              {t.page.title}
             </h2>
             <p className="mt-2 text-center text-lg text-gray-600">
-              Sign in to your account
+              {t.page.subtitle}
             </p>
           </div>
           
@@ -74,7 +107,7 @@ export default function Login() {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
+                  {t.form.email.label}
                 </label>
                 <input
                   id="email"
@@ -83,7 +116,7 @@ export default function Login() {
                   autoComplete="email"
                   required
                   className="form-input w-full text-black"
-                  placeholder="you@example.com"
+                  placeholder={t.form.email.placeholder}
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -92,13 +125,13 @@ export default function Login() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Password
+                    {t.form.password.label}
                   </label>
                   <Link 
                     href="/forgot-password" 
                     className="text-sm font-medium text-primary-600 hover:text-primary-500 transition-colors"
                   >
-                    Forgot password?
+                    {t.form.forgotPassword}
                   </Link>
                 </div>
                 <input
@@ -108,7 +141,7 @@ export default function Login() {
                   autoComplete="current-password"
                   required
                   className="form-input w-full text-black"
-                  placeholder="••••••••"
+                  placeholder={t.form.password.placeholder}
                   value={formData.password}
                   onChange={handleChange}
                 />
@@ -122,7 +155,7 @@ export default function Login() {
                   className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                  Remember me
+                  {t.form.rememberMe}
                 </label>
               </div>
 
@@ -138,10 +171,10 @@ export default function Login() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Signing in...
+                      {t.form.submitButton.loading}
                     </span>
                   ) : (
-                    'Sign in'
+                    t.form.submitButton.default
                   )}
                 </button>
               </div>
@@ -149,12 +182,12 @@ export default function Login() {
           </div>
           
           <p className="text-center text-sm text-gray-600 mt-6">
-            Don't have an account?{' '}
+            {t.footer.noAccount}{' '}
             <Link 
               href="/register" 
               className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
             >
-              Create an account
+              {t.footer.createAccount}
             </Link>
           </p>
         </div>

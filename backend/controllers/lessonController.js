@@ -246,7 +246,20 @@ export const updateLesson = async (req, res, next) => {
       });
     }
 
+    // Fix: Ensure attachments is always an array
     let currentAttachments = lesson.attachments || [];
+    if (!Array.isArray(currentAttachments)) {
+      try {
+        // If it's a JSON string, parse it
+        currentAttachments = typeof currentAttachments === 'string' 
+          ? JSON.parse(currentAttachments) 
+          : [];
+      } catch (e) {
+        // If parsing fails, set to empty array
+        currentAttachments = [];
+      }
+    }
+
     const filesToRemove = removedAttachments
       ? JSON.parse(removedAttachments || "[]")
       : []; // Assume removedAttachments is a JSON string array of paths
@@ -347,14 +360,32 @@ export const deleteLesson = async (req, res, next) => {
       });
     }
 
-    // Delete associated attachment files before deleting the lesson record
-    if (lesson.attachments && lesson.attachments.length > 0) {
-      lesson.attachments.forEach(att => {
-        const filePath = path.join(process.cwd(), att.path);
-         fs.unlink(filePath, (err) => {
-          if (err) console.error(`Error deleting attachment file ${filePath} during lesson deletion:`, err);
+    // Fix: Delete associated attachment files before deleting the lesson record
+    if (lesson.attachments) {
+      let attachmentsArray = lesson.attachments;
+      
+      // Ensure attachments is an array
+      if (!Array.isArray(attachmentsArray)) {
+        try {
+          // If it's a JSON string, parse it
+          attachmentsArray = typeof attachmentsArray === 'string' 
+            ? JSON.parse(attachmentsArray) 
+            : [];
+        } catch (e) {
+          // If parsing fails, set to empty array
+          attachmentsArray = [];
+        }
+      }
+
+      // Now safely iterate over the array
+      if (Array.isArray(attachmentsArray) && attachmentsArray.length > 0) {
+        attachmentsArray.forEach(att => {
+          const filePath = path.join(process.cwd(), att.path);
+          fs.unlink(filePath, (err) => {
+            if (err) console.error(`Error deleting attachment file ${filePath} during lesson deletion:`, err);
+          });
         });
-      });
+      }
     }
 
     await lesson.destroy();

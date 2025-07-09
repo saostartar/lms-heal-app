@@ -1,0 +1,130 @@
+{
+  "loading": {
+    "title": "Loading Your Learning Journey",
+    "subtitle": "Preparing your personalized course experience..."
+  },
+  "error": {
+    "title": "Oops! Something went wrong",
+    "tryAgain": "Try Again",
+    "goBack": "Go Back"
+  },
+  "notFound": {
+    "title": "Course Not Found",
+    "message": "We couldn't find the course you're looking for. It may have been moved or deleted.",
+    "backButton": "Back to Courses"
+  },
+  "navigation": {
+    "backToCatalog": "Back to Course Catalog",
+    "backToJourney": "My Learning Journey"
+  },
+  "courseInfo": {
+    "categories": {
+      "mental_health": "Mental Health",
+      "obesity": "Obesity Management", 
+      "nutrition": "Nutrition & Wellness",
+      "default": "Health Education"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "duration": {
+      "minutes": "min",
+      "hours": "h"
+    }
+  },
+  "enrollment": {
+    "enrollButton": "Start Learning Now",
+    "enrollButtonShort": "Enroll Now - Free",
+    "enrolling": "Enrolling...",
+    "readyToTransform": "Ready to Transform Your Knowledge?",
+    "coursePreview": "Course Preview"
+  },
+  "sections": {
+    "aboutCourse": {
+      "title": "About This Course",
+      "duration": "Duration",
+      "content": "Content",
+      "audience": "Audience",
+      "audienceValue": "Healthcare Professionals",
+      "moduleText": "modules",
+      "lessonText": "lessons"
+    },
+    "courseContent": {
+      "title": "Course Content",
+      "locked": "Locked",
+      "moreContent": "more lessons"
+    },
+    "features": {
+      "lifetimeAccess": "Full lifetime course access",
+      "trackProgress": "Track your learning progress", 
+      "assessments": "Knowledge assessments & quizzes",
+      "certificate": "Earn completion certificate"
+    },
+    "knowledgeAssessment": {
+      "title": "Knowledge Assessment",
+      "description": "This course includes comprehensive pre and post assessments to help you measure your learning progress and knowledge retention effectively.",
+      "unlockMessage": "Enroll to unlock assessments and track your progress"
+    }
+  },
+  "enrolled": {
+    "progress": {
+      "overall": "Overall Progress",
+      "modules": "Modules",
+      "lessons": "Lessons", 
+      "duration": "Duration",
+      "completed": "Course Completed!"
+    },
+    "moduleNavigation": {
+      "title": "Course Modules",
+      "lesson": "lesson",
+      "lessons": "lessons"
+    },
+    "assessments": {
+      "preTest": {
+        "title": "Pre-Test Assessment",
+        "description": "Measure your current knowledge level before starting the course journey.",
+        "button": "Start Pre-Test"
+      },
+      "postTest": {
+        "title": "Post-Test Assessment", 
+        "description": "Evaluate your progress and measure the knowledge you've gained.",
+        "button": "Start Post-Test"
+      },
+      "results": {
+        "title": "Assessment Results",
+        "preScore": "Pre-Test Score:",
+        "postScore": "Post-Test Score:",
+        "improvement": "Improvement",
+        "viewDetails": "View Detailed Results"
+      }
+    },
+    "moduleContent": {
+      "selectModule": "Select a Module",
+      "selectDescription": "Choose a module from the sidebar to explore its content and lessons.",
+      "viewAllLessons": "View All Lessons",
+      "moduleLessons": "Module Lessons",
+      "viewFullModule": "View full module",
+      "noLessons": "No Lessons Available",
+      "noLessonsDescription": "This module doesn't have any lessons yet. Check back soon!",
+      "viewCompleteModule": "View Complete Module",
+      "continueProgress": "Continue your learning progress"
+      
+    },
+     "instructor": {
+      "courseInstructor": "Course Instructor"
+    },
+    "lessonStatus": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "timeSpent": "Time spent:",
+      "videoLesson": "Video Lesson",
+      "textLesson": "Text Lesson"
+    },
+    "completion": {
+      "congratulations": "Congratulations!",
+      "message": "You've completed the lesson successfully!"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
+  },
+  "loading": {
+    "text": "Loading your learning journey..."
+  },
+  "error": {
+    "title": "Something went wrong",
+    "general": "Failed to load dashboard data"
+  },
+  "hero": {
+    "activeStatus": "Active Learner",
+    "welcomeMessage": "Track your learning progress, continue your courses, and reach your goals!",
+    "lastLogin": "Last login"
+  },
+  "stats": {
+    "progress": {
+      "title": "Your Progress",
+      "completed": "Completed Courses"
+    },
+    "enrollments": {
+      "title": "Active Enrollments",
+      "inProgress": "Courses In Progress"
+    },
+    "learningTime": {
+      "title": "Learning Time",
+      "hours": "Hours Spent Learning"
+    }
+  },
+  "continueLearning": {
+    "title": "Continue Learning",
+    "subtitle": "Pick up where you left off",
+    "viewAll": "View all courses",
+    "noCourses": {
+      "title": "No courses yet",
+      "message": "Start your learning journey today by enrolling in a course",
+      "button": "Browse Courses"
+    },
+    "progress": "Progress",
+    "lastAccessed": "Last accessed",
+    "continueButton": "Continue Learning"
+  },
+  "learningTip": {
+    "title": "Daily Learning Tip",
+    "tipTitle": "Consistency is key to learning",
+    "tipContent": "Studies show that studying for 30 minutes daily is more effective than cramming for hours once a week. Try to establish a regular learning routine - even short, focused sessions can lead to significant progress!"
+  },
+  "learningGoal": {
+    "title": "Learning Goal",
+    "subtitle": "Track your progress toward your learning goal",
+    "monthlyGoal": "Monthly Goal",
+    "hoursThisMonth": "Hours learned this month",
+    "congratulations": "Congratulations! You've reached your monthly learning goal! 🎉",
+    "remaining": "You're {hours} hours away from reaching your monthly goal!"
+  }
+}

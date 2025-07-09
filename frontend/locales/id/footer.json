@@ -1,0 +1,40 @@
+{
+  "brand": {
+    "title": "HEAL Student",
+    "subtitle": "Health • Emotion • Active Living",
+    "description": "Platform kursus online gratis berbasis psikologi untuk membantu Anda mendapatkan pengetahuan tentang kesehatan psikologi, kesehatan mental, dan gizi seimbang untuk pola hidup yang lebih sehat."
+  },
+  "social": {
+    "followUs": "Ikuti Kami:"
+  },
+  "quickLinks": {
+    "title": "Tautan Cepat",
+    "home": "Beranda",
+    "courses": "Kursus",
+    "forum": "Forum Diskusi",
+    "news": "Berita Kesehatan",
+    "about": "Tentang Kami",
+    "faq": "FAQ"
+  },
+  "programs": {
+    "title": "Program & Dukungan",
+    "freeCourses": "Kursus Gratis",
+    "consultation": "Konsultasi Online",
+    "weeklySession": "Sesi Zoom Mingguan",
+    "helpCenter": "Pusat Bantuan",
+    "contactMentor": "Hubungi Mentor",
+    "privacy": "Kebijakan Privasi"
+  },
+  "stats": {
+    "availableCourses": "Kursus Tersedia",
+    "freeCourses": "100% Gratis"
+  },
+  "legal": {
+    "copyright": "HEAL Student. Semua hak dilindungi.",
+    "platformSubtitle": "Platform Kesehatan Holistik untuk Generasi Masa Depan",
+    "terms": "Syarat & Ketentuan",
+    "privacyPolicy": "Kebijakan Privasi",
+    "cookiePolicy": "Kebijakan Cookie"
+  },
+  "backToTop": "Kembali ke atas"
+}

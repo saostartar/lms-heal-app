@@ -1,0 +1,84 @@
+{
+  "loading": {
+    "text": "Memuat perjalanan belajar Anda..."
+  },
+  "error": {
+    "title": "Gagal memuat kursus",
+    "tryAgain": "Coba Lagi"
+  },
+  "header": {
+    "title": "Perjalanan Belajar Anda",
+    "subtitle": "Lacak progress, lanjutkan pembelajaran, dan jelajahi kursus baru untuk memperluas pengetahuan kesehatan Anda."
+  },
+  "quickStats": {
+    "totalCourses": "Total Kursus",
+    "averageProgress": "Rata-rata Progress"
+  },
+  "statsCards": {
+    "completedCourses": "Kursus Selesai",
+    "currentlyLearning": "Sedang Belajar",
+    "learningHours": "Jam Belajar",
+    "averageProgress": "Progress Rata-rata"
+  },
+  "tabs": {
+    "allCourses": "Semua Kursus",
+    "inProgress": "Sedang Belajar",
+    "completed": "Selesai",
+    "notStarted": "Belum Dimulai"
+  },
+  "progressSection": {
+    "title": "Progress Pembelajaran",
+    "subtitle": "Visualisasi kemajuan belajar Anda",
+    "coursesCompleted": "kursus telah diselesaikan",
+    "from": "dari"
+  },
+  "emptyStates": {
+    "completed": {
+      "title": "Belum ada kursus yang diselesaikan",
+      "message": "Terus belajar untuk menyelesaikan kursus pertama Anda!"
+    },
+    "inProgress": {
+      "title": "Belum ada kursus yang sedang dipelajari",
+      "message": "Mulai belajar kursus yang sudah Anda daftarkan."
+    },
+    "notStarted": {
+      "title": "Semua kursus sudah dimulai",
+      "message": "Semua kursus Anda sudah dalam tahap pembelajaran."
+    },
+    "all": {
+      "title": "Belum ada kursus yang terdaftar",
+      "message": "Jelajahi dan daftar kursus baru untuk memulai perjalanan belajar Anda."
+    },
+    "button": "Jelajahi Kursus"
+  },
+  "courseCard": {
+    "completed": "Selesai",
+    "duration": {
+      "hours": "j",
+      "minutes": "m"
+    },
+    "progress": "Progress",
+    "completedOn": "Selesai:",
+    "lastActive": "Terakhir aktif:",
+    "notStarted": "Belum dimulai",
+    "actions": {
+      "viewCertificate": "Lihat Sertifikat",
+      "continueLearning": "Lanjutkan Belajar",
+      "startLearning": "Mulai Belajar"
+    }
+  },
+  "categories": {
+    "psikologi": "Psikologi",
+    "mental": "Kesehatan Mental",
+    "gizi": "Gizi"
+  },
+  "callToAction": {
+    "title": "Siap memperluas pengetahuan Anda?",
+    "subtitle": "Temukan kursus kesehatan terbaru yang dirancang khusus untuk tenaga kesehatan profesional.",
+    "exploreCourses": "Jelajahi Kursus Baru",
+    "viewAchievements": "Lihat Pencapaian"
+  },
+  "dates": {
+    "notStarted": "Belum dimulai"
+  }
+}

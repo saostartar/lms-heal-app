@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "backToForums": "Kembali ke Forum"
+  },
+  "discussions": {
+    "title": "Diskusi",
+    "startDiscussion": "Mulai Diskusi",
+    "cancel": "Batal",
+    "loginToStart": "Masuk untuk Mulai Diskusi"
+  },
+  "createForm": {
+    "title": "Mulai Diskusi Baru",
+    "titleLabel": "Judul",
+    "titlePlaceholder": "Apa yang ingin didiskusikan?",
+    "contentLabel": "Konten",
+    "contentPlaceholder": "Bagikan pemikiran Anda...",
+    "creating": "Membuat...",
+    "createButton": "Buat Diskusi"
+  },
+  "emptyState": {
+    "noDiscussions": "Belum ada diskusi.",
+    "beFirst": "Jadilah yang pertama memulai!"
+  },
+  "topicStats": {
+    "views": "dilihat",
+    "replies": "balasan",
+    "lastReply": "Balasan terakhir"
+  },
+  "loading": {
+    "message": "Memuat..."
+  },
+  "error": {
+    "categoryNotFound": "Kategori tidak ditemukan",
+    "failedToLoad": "Gagal memuat diskusi. Silakan coba lagi nanti.",
+    "failedToCreate": "Gagal membuat topik. Silakan coba lagi."
+  }
+}

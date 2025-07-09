@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "sectionLabel": "ABOUT US",
+    "title": "About HEAL Student",
+    "description": "A global platform representing expert consultants to provide knowledge about psychological health, mental health, and balanced nutrition"
+  },
+  "content": {
+    "paragraph1": {
+      "brandName": "HEAL Student: Health, Emotion, and Active Living",
+      "description": "is a global platform representing expert consultants to provide explanations, understanding, and knowledge regarding the importance of psychological health, mental health, and balanced nutrition for the body in managing healthy lifestyle patterns."
+    },
+    "paragraph2": {
+      "description": "This platform was founded by researchers from several countries",
+      "countries": "(USA, Malaysia, and Indonesia)",
+      "collaboration": "who are experts in their fields. We also collaborate with business actors in the industry, startups, and professionals in health and physical fields to develop this free course program."
+    }
+  },
+  "team": {
+    "sectionLabel": "OUR EXPERT TEAM",
+    "title": "Meet Our Expert Team",
+    "description": "This free online course platform is led by researchers and facilitators who are experts in their fields.",
+    "expertBadge": "Expert Instructor"
+  },
+  "philosophy": {
+    "quote": "IN A HEALTHY BODY THERE IS A HEALTHY SOUL",
+    "attribution": "DECIMUS IUNIUS JUVENALIS"
+  },
+  "contact": {
+    "sectionLabel": "CONTACT US",
+    "title": "Contact",
+    "leadTitle": "Lead Researcher & Platform Coordinator"
+  },
+  "cta": {
+    "title": "Ready to Start Your Learning Journey?",
+    "description": "Join thousands of other participants in our free course program",
+    "viewCourses": "View Courses",
+    "registerNow": "Register Now"
+  },
+  "instructors": {
+    "countries": {
+      "usa": "USA",
+      "malaysia": "Malaysia", 
+      "indonesia": "Indonesia"
+    }
+  }
+}

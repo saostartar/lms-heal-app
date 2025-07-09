@@ -1,0 +1,115 @@
+{
+  "hero": {
+    "title": "Our Free Course Programs",
+    "description": "HEAL Student platform provides 6 courses led by expert facilitators for 90 minutes online.",
+    "features": {
+      "multilingual": "Indonesian & English",
+      "schedule": "Opened Every 3 Weeks",
+      "mentors": "Professional Mentors"
+    }
+  },
+  "courseOutline": {
+    "title": "Available Course List",
+    "description": "Each course is designed to provide deep understanding of holistic health with practical and sustainable approaches.",
+    "courses": {
+      "1": {
+        "title": "Introduction to Balanced Nutrition and Eating Patterns",
+        "topics": [
+          "Introduction to balanced nutrition needed by the body",
+          "Various foods that contain appropriate nutrition",
+          "How much nutrition is needed by the body",
+          "The importance of consuming balanced nutrition for the body",
+          "How to manage eating patterns",
+          "Why eating patterns need to be managed",
+          "Consultation"
+        ]
+      },
+      "2": {
+        "title": "Introduction to Psychology",
+        "topics": [
+          "Introduction to psychology",
+          "Introduction to various psychological problems and their characteristics",
+          "How to maintain psychological health",
+          "Why psychological health must be maintained and its impact",
+          "Consultation"
+        ]
+      },
+      "3": {
+        "title": "Introduction to Mental Health",
+        "topics": [
+          "Introduction to mental health",
+          "Characteristics of disturbed mental health",
+          "How to prevent disturbed mental health",
+          "How to maintain mental health",
+          "How important mental health is",
+          "Consultation"
+        ]
+      },
+      "4": {
+        "title": "Synergizing Physical and Mental Health",
+        "topics": [
+          "The importance of synergy between physical and mental health",
+          "How to synergize physical and mental health"
+        ]
+      },
+      "5": {
+        "title": "Implementing Physical and Mental Health",
+        "topics": [
+          "How to implement physical and mental health in daily life",
+          "Benefits and impacts received",
+          "Why it must be implemented"
+        ]
+      },
+      "6": {
+        "title": "Evaluation of Physical and Mental Health",
+        "topics": [
+          "Evaluation of physical and mental health from implementation results",
+          "Consultation"
+        ]
+      }
+    },
+    "learningMaterials": "Learning Materials:",
+    "course": "Course",
+    "minutes": "Minutes",
+    "topics": "Topics"
+  },
+  "filters": {
+    "searchCourses": "Search Courses",
+    "searchPlaceholder": "Search courses...",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "difficultyLevel": "Difficulty Level",
+    "allLevels": "All Levels",
+    "applyFilter": "Apply Filter"
+  },
+  "availableCourses": {
+    "title": "Available Courses",
+    "description": "Choose and start your learning journey today",
+    "loadingCourses": "Loading courses...",
+    "noCoursesFound": "No courses found",
+    "noCoursesDescription": "We couldn't find courses matching your search criteria. Try adjusting your search filters.",
+    "free": "FREE",
+    "expertMentor": "Expert Mentor",
+    "viewPreview": "View Preview"
+  },
+  "callToAction": {
+    "title": "Ready to Start Your Health Journey?",
+    "description": "Join thousands of other participants and gain holistic health knowledge that will change your life.",
+    "registerNow": "Register Now - Free",
+    "alreadyAccount": "Already have an account? Login"
+  },
+  "categories": {
+    "psikologi": "Psychology",
+    "mental": "Mental Health",
+    "gizi": "Nutrition & Diet"
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "common": {
+    "consultation": "Consultation",
+    "minutes": "Minutes"
+  }
+}

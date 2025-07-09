@@ -5,12 +5,32 @@ import Link from 'next/link';
 import axios from '../../lib/axios';
 import Header from '../../components/layout/header';
 import Footer from '../../components/layout/footer';
+import { useLanguage } from '../../lib/context/LanguageContext';
 import { ChatBubbleLeftRightIcon, ChevronRightIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 export default function ForumHomePage() {
+  const { currentLanguage } = useLanguage();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [t, setT] = useState({});
+
+  // Load translations
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../locales/${currentLanguage}/forum.json`);
+        setT(translations.default);
+      } catch (error) {
+        console.error('Error loading forum translations:', error);
+        // Fallback to English if translation fails
+        const fallback = await import('../../locales/en/forum.json');
+        setT(fallback.default);
+      }
+    };
+
+    loadTranslations();
+  }, [currentLanguage]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -20,14 +40,29 @@ export default function ForumHomePage() {
         setCategories(data.data);
       } catch (err) {
         console.error('Failed to fetch forum categories:', err);
-        setError('Failed to load forum categories. Please try again later.');
+        setError(t.error?.failedToLoad || 'Failed to load forum categories. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCategories();
-  }, []);
+    if (Object.keys(t).length > 0) {
+      fetchCategories();
+    }
+  }, [t]);
+
+  // Return loading state if translations aren't loaded yet
+  if (!t.hero) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Header />
+        <div className="flex-grow flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -41,13 +76,13 @@ export default function ForumHomePage() {
           <div className="absolute -bottom-40 -left-24 w-80 h-80 rounded-full bg-primary-500 opacity-10 blur-3xl"></div>
           
           <div className="relative z-10 max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Community Forums</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">{t.hero.title}</h1>
             <p className="text-xl text-white/90 mb-8">
-              Join discussions, ask questions, and connect with others in our learning community
+              {t.hero.description}
             </p>
             <div className="inline-flex items-center px-5 py-2.5 bg-white/20 rounded-lg backdrop-blur-sm border border-white/30 text-white hover:bg-white/30 transition-all">
               <UserGroupIcon className="w-5 h-5 mr-2" />
-              <span>{categories.length} Discussion Categories</span>
+              <span>{categories.length} {t.hero.categoriesCount}</span>
             </div>
           </div>
         </div>
@@ -57,18 +92,18 @@ export default function ForumHomePage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl shadow-md">
             <div className="animate-spin h-12 w-12 rounded-full border-4 border-primary-200 border-t-primary-600"></div>
-            <p className="mt-4 text-gray-600 font-medium">Loading forum categories...</p>
+            <p className="mt-4 text-gray-600 font-medium">{t.loading.categories}</p>
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-8 rounded-xl flex items-center justify-center shadow-sm">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Unable to Load Forums</h3>
+              <h3 className="text-lg font-semibold mb-2">{t.error.title}</h3>
               <p>{error}</p>
               <button 
                 onClick={() => window.location.reload()} 
                 className="mt-4 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-300"
               >
-                Retry
+                {t.error.retry}
               </button>
             </div>
           </div>
@@ -82,7 +117,7 @@ export default function ForumHomePage() {
                     <div className="h-10 w-10 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center">
                       <ChatBubbleLeftRightIcon className="h-5 w-5" />
                     </div>
-                    <span className="badge badge-primary">{category.topicCount || 0} Topics</span>
+                    <span className="badge badge-primary">{category.topicCount || 0} {t.category.topics}</span>
                   </div>
                   <Link href={`/forum/categories/${category.id}`} className="group-hover:text-primary-700">
                     <h2 className="text-xl font-bold mb-0 text-gray-800 group-hover:text-primary-700">{category.title}</h2>
@@ -100,7 +135,7 @@ export default function ForumHomePage() {
                     href={`/forum/categories/${category.id}`}
                     className="flex items-center justify-between w-full text-primary-600 font-medium hover:text-primary-700 transition-colors group"
                   >
-                    <span>View Discussions</span>
+                    <span>{t.category.viewDiscussions}</span>
                     <ChevronRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
@@ -109,18 +144,16 @@ export default function ForumHomePage() {
           </div>
         )}
         
-        
-        
         {/* Empty state */}
         {!loading && !error && categories.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-sm">
             <div className="w-20 h-20 bg-primary-100 rounded-full mx-auto flex items-center justify-center mb-4">
               <ChatBubbleLeftRightIcon className="h-10 w-10 text-primary-500" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">No Categories Yet</h3>
-            <p className="text-gray-600 mb-6">Forum categories will appear here once they're created</p>
+            <h3 className="text-xl font-semibold mb-2">{t.emptyState.title}</h3>
+            <p className="text-gray-600 mb-6">{t.emptyState.description}</p>
             <Link href="/forum/new" className="btn btn-primary inline-flex">
-              Request a Category
+              {t.emptyState.action}
             </Link>
           </div>
         )}

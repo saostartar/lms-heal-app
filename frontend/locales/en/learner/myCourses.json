@@ -1,0 +1,84 @@
+{
+  "loading": {
+    "text": "Loading your learning journey..."
+  },
+  "error": {
+    "title": "Failed to load courses",
+    "tryAgain": "Try Again"
+  },
+  "header": {
+    "title": "Your Learning Journey",
+    "subtitle": "Track progress, continue learning, and explore new courses to expand your health knowledge."
+  },
+  "quickStats": {
+    "totalCourses": "Total Courses",
+    "averageProgress": "Average Progress"
+  },
+  "statsCards": {
+    "completedCourses": "Completed Courses",
+    "currentlyLearning": "Currently Learning",
+    "learningHours": "Learning Hours",
+    "averageProgress": "Average Progress"
+  },
+  "tabs": {
+    "allCourses": "All Courses",
+    "inProgress": "In Progress", 
+    "completed": "Completed",
+    "notStarted": "Not Started"
+  },
+  "progressSection": {
+    "title": "Learning Progress",
+    "subtitle": "Visualization of your learning progress",
+    "coursesCompleted": "courses completed",
+    "from": "of"
+  },
+  "emptyStates": {
+    "completed": {
+      "title": "No completed courses yet",
+      "message": "Keep learning to complete your first course!"
+    },
+    "inProgress": {
+      "title": "No courses in progress", 
+      "message": "Start learning the courses you've enrolled in."
+    },
+    "notStarted": {
+      "title": "All courses have been started",
+      "message": "All your courses are already in the learning phase."
+    },
+    "all": {
+      "title": "No courses enrolled yet",
+      "message": "Explore and enroll in new courses to start your learning journey."
+    },
+    "button": "Explore Courses"
+  },
+  "courseCard": {
+    "completed": "Completed",
+    "duration": {
+      "hours": "h",
+      "minutes": "m"
+    },
+    "progress": "Progress",
+    "completedOn": "Completed:",
+    "lastActive": "Last active:",
+    "notStarted": "Not started yet",
+    "actions": {
+      "viewCertificate": "View Certificate",
+      "continueLearning": "Continue Learning", 
+      "startLearning": "Start Learning"
+    }
+  },
+  "categories": {
+    "psikologi": "Psychology",
+    "mental": "Mental Health",
+    "gizi": "Nutrition"
+  },
+  "callToAction": {
+    "title": "Ready to expand your knowledge?",
+    "subtitle": "Discover the latest health courses designed specifically for healthcare professionals.",
+    "exploreCourses": "Explore New Courses",
+    "viewAchievements": "View Achievements"
+  },
+  "dates": {
+    "notStarted": "Not started yet"
+  }
+}

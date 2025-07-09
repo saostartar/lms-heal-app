@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": {
+      "line1": "Discover Your",
+      "line2": "Learning Path"
+    },
+    "subtitle": "Explore our hand-picked courses designed to advance your knowledge and transform your career.",
+    "searchPlaceholder": "Search for a course..."
+  },
+  "filters": {
+    "title": "Advanced Filters",
+    "clearFilters": "Clear Filters",
+    "category": "Category",
+    "level": "Level",
+    "all": "All"
+  },
+  "results": {
+    "title": "Available Courses",
+    "resultsCount": "results"
+  },
+  "loading": {
+    "text": "Loading courses..."
+  },
+  "errors": {
+    "title": "Oops! Something went wrong",
+    "loadFailed": "Failed to load courses. Please try again later."
+  },
+  "empty": {
+    "title": "No courses found",
+    "message": "We couldn't find any courses matching your criteria. Try adjusting your filters or check back later for new content."
+  },
+  "course": {
+    "viewButton": "View Course"
+  },
+  "categories": {
+    "psikologi": "Psychology",
+    "mental": "Mental Health",
+    "gizi": "Nutrition"
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate", 
+    "advanced": "Advanced"
+  }
+}

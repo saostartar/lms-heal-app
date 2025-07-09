@@ -1,8 +1,16 @@
 'use client';
 
-import { useState} from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import axios from '../../lib/axios';
+
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <div className="h-40 bg-gray-100 animate-pulse rounded-lg"></div>
+});
+
+import 'react-quill/dist/quill.snow.css';
 
 export default function LessonForm({ courseId, moduleId, initialData = null }) {
   const router = useRouter();
@@ -27,11 +35,50 @@ export default function LessonForm({ courseId, moduleId, initialData = null }) {
   // State for active form section
   const [activeSection, setActiveSection] = useState('basics');
 
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'font': [] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+    clipboard: {
+      matchVisual: false,
+    }
+  };
+
+  const quillFormats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    'script',
+    'list', 'bullet', 'indent',
+    'align',
+    'blockquote', 'code-block',
+    'link', 'image', 'video'
+  ];
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'number' ? parseInt(value) || 0 : value
+    }));
+  };
+
+  // Handle Quill content change
+  const handleContentChange = (content, delta, source, editor) => {
+    setFormData(prev => ({
+      ...prev,
+      content: content
     }));
   };
 
@@ -120,6 +167,21 @@ export default function LessonForm({ courseId, moduleId, initialData = null }) {
   };
 
   const progressPercentage = calculateProgress();
+
+  // Function to render content with proper formatting
+ const renderContentPreview = (content) => {
+    if (!content || content === '<p><br></p>') {
+      return <p className="text-gray-600 italic">Your content preview will appear here.</p>;
+    }
+    
+    return (
+      <div 
+        className="prose prose-lg max-w-none text-gray-900"
+        dangerouslySetInnerHTML={{ __html: content }}
+        style={{ color: '#374151' }}
+      />
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -420,7 +482,7 @@ export default function LessonForm({ courseId, moduleId, initialData = null }) {
           </div>
 
           {/* Content Section */}
-          <div className={`${activeSection === 'content' ? 'block' : 'hidden'}`}>
+                   <div className={`${activeSection === 'content' ? 'block' : 'hidden'}`}>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
               <div className="px-8 py-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100">
                 <h2 className="text-xl font-bold text-gray-800">Lesson Content</h2>
@@ -429,62 +491,214 @@ export default function LessonForm({ courseId, moduleId, initialData = null }) {
               
               <div className="p-8">
                 <div className="mb-6">
-                  <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-4">
                     Content <span className="text-primary-500">*</span>
                   </label>
-                  <div className="rounded-xl overflow-hidden border border-gray-300 shadow-sm">
-                    <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 flex items-center">
-                      <div className="flex space-x-2">
-                        <button type="button" className="p-1 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                          </svg>
-                        </button>
-                        <button type="button" className="p-1 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12l3 3 6-6" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="border-l border-gray-300 h-6 mx-4"></div>
-                      <div className="text-sm text-gray-500">Rich Text Editor</div>
-                    </div>
-                    <textarea
-                      id="content"
-                      name="content"
-                      rows={12}
-                      required
-                      className="text-black block w-full border-0 focus:ring-0 p-4 resize-y"
+                  
+                  {/* Rich Text Editor */}
+                 <div className="rounded-xl overflow-hidden border border-gray-300 shadow-sm">
+                    <style jsx global>{`
+                      .ql-container {
+                        font-size: 16px;
+                      }
+                      .ql-editor {
+                        min-height: 300px;
+                        line-height: 1.6;
+                        color: #374151 !important;
+                        background-color: #ffffff !important;
+                      }
+                      .ql-editor p {
+                        color: #374151 !important;
+                      }
+                      .ql-editor h1,
+                      .ql-editor h2,
+                      .ql-editor h3,
+                      .ql-editor h4,
+                      .ql-editor h5,
+                      .ql-editor h6 {
+                        color: #1f2937 !important;
+                      }
+                      .ql-editor ul,
+                      .ql-editor ol,
+                      .ql-editor li {
+                        color: #374151 !important;
+                      }
+                      .ql-editor strong,
+                      .ql-editor b {
+                        color: #1f2937 !important;
+                      }
+                      .ql-editor em,
+                      .ql-editor i {
+                        color: #374151 !important;
+                      }
+                      .ql-editor blockquote {
+                        color: #6b7280 !important;
+                        border-left: 4px solid #e5e7eb;
+                        padding-left: 1rem;
+                        margin: 1rem 0;
+                        font-style: italic;
+                      }
+                      .ql-editor code {
+                        background-color: #f3f4f6;
+                        color: #be185d !important;
+                        padding: 0.125rem 0.25rem;
+                        border-radius: 0.25rem;
+                        font-size: 0.875rem;
+                      }
+                      .ql-editor pre {
+                        background-color: #1f2937;
+                        color: #f9fafb !important;
+                        padding: 1rem;
+                        border-radius: 0.5rem;
+                        overflow-x: auto;
+                        margin: 1rem 0;
+                      }
+                      .ql-editor pre code {
+                        background-color: transparent;
+                        color: inherit !important;
+                        padding: 0;
+                      }
+                      .ql-editor a {
+                        color: #3b82f6 !important;
+                        text-decoration: underline;
+                      }
+                      .ql-toolbar {
+                        border-bottom: 1px solid #e5e7eb;
+                        background-color: #f9fafb;
+                      }
+                      .ql-container {
+                        border-bottom: none;
+                      }
+                      .ql-editor.ql-blank::before {
+                        color: #9ca3af !important;
+                        font-style: italic;
+                      }
+                      /* Fix untuk dark mode atau theme lain yang mungkin mengubah warna */
+                      .ql-snow .ql-editor {
+                        color: #374151 !important;
+                      }
+                      /* Pastikan semua elemen child juga menggunakan warna yang benar */
+                      .ql-editor * {
+                        color: inherit !important;
+                      }
+                      .ql-editor span {
+                        color: #374151 !important;
+                      }
+                    `}</style>
+                    
+                    <ReactQuill
+                      theme="snow"
                       value={formData.content}
-                      onChange={handleChange}
-                      placeholder="Enter your lesson content here..."
-                    ></textarea>
+                      onChange={handleContentChange}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Start writing your lesson content here. Use the toolbar above to format your text..."
+                      style={{
+                        backgroundColor: 'white',
+                        color: '#374151'
+                      }}
+                    />
                   </div>
-                  <p className="mt-2 text-sm text-gray-500 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  
+                  <div className="mt-3 flex items-start space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Supports basic HTML formatting. Use clear, concise language for better comprehension.
-                  </p>
+                    <div className="text-sm text-gray-600">
+                      <p className="mb-1">
+                        <strong>Tips for creating engaging content:</strong>
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 text-xs">
+                        <li>Use headings to organize your content</li>
+                        <li>Bold important terms and concepts</li>
+                        <li>Use bullet points for lists and key takeaways</li>
+                        <li>Add images and videos to support your explanations</li>
+                        <li>Keep paragraphs short and focused</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Preview Section */}
+                {/* Preview Section - Updated */}
+                {/* Preview Section - Updated */}
                 <div className="mt-10">
-                  <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                  <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                     Content Preview
                   </h3>
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 overflow-auto max-h-60">
-                    {formData.content ? (
-                      <div className="prose max-w-none text-black">
-                        <div dangerouslySetInnerHTML={{ __html: formData.content }} />
-                      </div>
-                    ) : (
-                      <p className="text-gray-400 italic">Your content preview will appear here.</p>
-                    )}
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 overflow-auto max-h-96">
+                    <style jsx>{`
+                      .prose { color: #374151 !important; }
+                      .prose h1 { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; color: #1f2937 !important; }
+                      .prose h2 { font-size: 1.75rem; font-weight: bold; margin-bottom: 0.875rem; color: #1f2937 !important; }
+                      .prose h3 { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.75rem; color: #1f2937 !important; }
+                      .prose h4 { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.625rem; color: #1f2937 !important; }
+                      .prose h5 { font-size: 1.125rem; font-weight: bold; margin-bottom: 0.5rem; color: #1f2937 !important; }
+                      .prose h6 { font-size: 1rem; font-weight: bold; margin-bottom: 0.5rem; color: #1f2937 !important; }
+                      .prose p { margin-bottom: 1rem; line-height: 1.6; color: #374151 !important; }
+                      .prose ul, .prose ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #374151 !important; }
+                      .prose li { margin-bottom: 0.25rem; color: #374151 !important; }
+                      .prose blockquote { 
+                        border-left: 4px solid #e5e7eb; 
+                        padding-left: 1rem; 
+                        margin: 1rem 0;
+                        font-style: italic;
+                        color: #6b7280 !important;
+                      }
+                      .prose code { 
+                        background-color: #f3f4f6; 
+                        padding: 0.125rem 0.25rem; 
+                        border-radius: 0.25rem;
+                        font-size: 0.875rem;
+                        color: #be185d !important;
+                      }
+                      .prose pre { 
+                        background-color: #1f2937; 
+                        color: #f9fafb !important; 
+                        padding: 1rem; 
+                        border-radius: 0.5rem;
+                        overflow-x: auto;
+                        margin: 1rem 0;
+                      }
+                      .prose pre code {
+                        background-color: transparent;
+                        color: inherit !important;
+                        padding: 0;
+                      }
+                      .prose img { 
+                        max-width: 100%; 
+                        height: auto; 
+                        border-radius: 0.5rem;
+                        margin: 1rem 0;
+                      }
+                      .prose a { 
+                        color: #3b82f6 !important; 
+                        text-decoration: underline;
+                      }
+                      .prose a:hover { 
+                        color: #1d4ed8 !important; 
+                      }
+                      .prose strong, .prose b {
+                        font-weight: 700;
+                        color: #1f2937 !important;
+                      }
+                      .prose em, .prose i {
+                        font-style: italic;
+                        color: #374151 !important;
+                      }
+                      .prose u {
+                        text-decoration: underline;
+                        color: #374151 !important;
+                      }
+                      .prose s {
+                        text-decoration: line-through;
+                        color: #374151 !important;
+                      }
+                    `}</style>
+                    {renderContentPreview(formData.content)}
                   </div>
                 </div>
               </div>

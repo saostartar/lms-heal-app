@@ -1,0 +1,59 @@
+{
+  "greeting": {
+    "morning": "Selamat pagi",
+    "afternoon": "Selamat siang",
+    "evening": "Selamat malam"
+  },
+  "loading": {
+    "text": "Memuat perjalanan belajar Anda..."
+  },
+  "error": {
+    "title": "Terjadi kesalahan",
+    "general": "Gagal memuat data dashboard"
+  },
+  "hero": {
+    "activeStatus": "Pelajar Aktif",
+    "welcomeMessage": "Lacak kemajuan belajar Anda, lanjutkan kursus, dan capai tujuan Anda!",
+    "lastLogin": "Login terakhir"
+  },
+  "stats": {
+    "progress": {
+      "title": "Kemajuan Anda",
+      "completed": "Kursus Selesai"
+    },
+    "enrollments": {
+      "title": "Pendaftaran Aktif",
+      "inProgress": "Kursus Dalam Proses"
+    },
+    "learningTime": {
+      "title": "Waktu Belajar",
+      "hours": "Jam Belajar"
+    }
+  },
+  "continueLearning": {
+    "title": "Lanjutkan Belajar",
+    "subtitle": "Lanjutkan dari tempat Anda berhenti",
+    "viewAll": "Lihat semua kursus",
+    "noCourses": {
+      "title": "Belum ada kursus",
+      "message": "Mulai perjalanan belajar Anda hari ini dengan mendaftar kursus",
+      "button": "Jelajahi Kursus"
+    },
+    "progress": "Kemajuan",
+    "lastAccessed": "Terakhir diakses",
+    "continueButton": "Lanjutkan Belajar"
+  },
+  "learningTip": {
+    "title": "Tips Belajar Harian",
+    "tipTitle": "Konsistensi adalah kunci pembelajaran",
+    "tipContent": "Penelitian menunjukkan bahwa belajar 30 menit setiap hari lebih efektif daripada belajar berjam-jam sekali seminggu. Cobalah membuat rutina belajar yang teratur - sesi singkat dan fokus dapat menghasilkan kemajuan yang signifikan!"
+  },
+  "learningGoal": {
+    "title": "Target Belajar",
+    "subtitle": "Lacak kemajuan menuju target belajar Anda",
+    "monthlyGoal": "Target Bulanan",
+    "hoursThisMonth": "Jam belajar bulan ini",
+    "congratulations": "Selamat! Anda telah mencapai target belajar bulanan! 🎉",
+    "remaining": "Anda tinggal {hours} jam lagi untuk mencapai target bulanan!"
+  }
+}

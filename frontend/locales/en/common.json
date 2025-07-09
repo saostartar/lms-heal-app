@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "forum": "Forum",
+    "news": "News",
+    "faq": "FAQ",
+    "about": "About Us",
+    "login": "Login",
+    "register": "Register",
+    "profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "hero": {
+    "welcome": "Welcome to",
+    "title": "HEAL Student",
+    "subtitle": "Health, Emotion, and Active Living",
+    "description": "Free Course Program Based on Psychology, Mental Health, and Balanced Nutrition.",
+    "cta": "View Course Programs",
+    "platform": "Holistic Health Platform"
+  },
+  "courses": {
+    "title": "Our Free Course Programs",
+    "description": "HEAL Student platform provides 6 courses led by expert facilitators for 90 minutes online.",
+    "available": "Available Courses",
+    "searchPlaceholder": "Search courses...",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "level": "Difficulty Level",
+    "allLevels": "All Levels",
+    "applyFilter": "Apply Filter",
+    "noCoursesFound": "No courses found",
+    "noCoursesDescription": "We couldn't find courses matching your search criteria. Try adjusting your search filters.",
+    "startLearning": "Start Learning",
+    "continueReading": "Continue Reading",
+    "enrollNow": "Enroll Now - Free",
+    "alreadyAccount": "Already have an account? Login"
+  },
+  "dashboard": {
+    "learningJourney": "Your Learning Journey",
+    "trackProgress": "Track progress, continue learning, and explore new courses to expand your health knowledge.",
+    "learningProgress": "Learning Progress",
+    "progressVisualization": "Visualization of your learning progress",
+    "allCourses": "All Courses",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "notStarted": "Not Started",
+    "noCoursesRegistered": "No courses registered yet",
+    "browseDescription": "Explore and register for new courses to start your learning journey.",
+    "browseCourses": "Browse Courses",
+    "readyToExpand": "Ready to expand your knowledge?",
+    "findLatestCourses": "Find the latest health courses designed specifically for professional healthcare workers.",
+    "exploreNewCourses": "Explore New Courses",
+    "viewAchievements": "View Achievements"
+  },
+  "footer": {
+    "description": "Free online course platform based on psychology to help you gain knowledge about psychological health, mental health, and balanced nutrition for a healthier lifestyle.",
+    "followUs": "Follow Us:",
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "legal": "Legal",
+    "copyright": "HEAL Student. All rights reserved.",
+    "platformSubtitle": "Holistic Health Platform for Future Generations"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "loadingCourses": "Loading courses...",
+    "failedToLoad": "Failed to load courses",
+    "tryAgain": "Try Again",
+    "lastActive": "Last active",
+    "completed": "Completed",
+    "notStarted": "Not started",
+    "hours": "hours",
+    "minutes": "minutes"
+  },
+  "categories": {
+    "psychology": "Psychology",
+    "mental": "Mental Health",
+    "nutrition": "Nutrition & Diet"
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  }
+}
