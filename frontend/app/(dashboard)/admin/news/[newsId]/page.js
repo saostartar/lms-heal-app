@@ -1,39 +1,6 @@
 import axios from '@/lib/axios';
 import EditNewsClient from './edit-news-client';
 
-// Fungsi ini memberitahu Next.js semua ID berita yang ada untuk dibuatkan halaman statis
-export async function generateStaticParams() {
-  try {
-    // Perbaikan: Menggunakan endpoint admin yang mengembalikan struktur berbeda
-    const response = await axios.get('/api/news/admin'); 
-    
-    // Perbaikan: Akses array berita dari response.data.data.news
-    const newsData = response.data.data;
-    const newsList = newsData.news;
-
-    if (!Array.isArray(newsList)) {
-      console.warn("generateStaticParams (Admin News): API tidak mengembalikan array di dalam `data.news`.");
-      return [];
-    }
-
-    // Tambahkan path untuk halaman "create" (newsId: 'create')
-    const params = [
-      { newsId: 'create' }  // Halaman untuk membuat berita baru
-    ];
-
-    // Tambahkan path untuk setiap berita yang ada
-    newsList.forEach(news => {
-      params.push({
-        newsId: news.id.toString(),
-      });
-    });
-
-    return params;
-  } catch (error) {
-    console.error("Gagal membuat static params untuk Admin News:", error.response?.data?.message || error.message);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil data untuk satu berita spesifik saat build
 async function getNewsData(newsId) {

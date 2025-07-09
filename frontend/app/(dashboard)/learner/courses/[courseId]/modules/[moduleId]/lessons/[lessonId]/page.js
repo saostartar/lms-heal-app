@@ -2,39 +2,7 @@ import axios from '@/lib/axios';
 import LessonDetailClient from './lesson-detail-client';
 import { cookies } from 'next/headers';
 
-// Fungsi ini memberitahu Next.js semua kombinasi path yang ada
-export async function generateStaticParams() {
-  try {
-    const allParams = [];
-    const coursesRes = await axios.get('/api/courses');
-    const courses = coursesRes.data.data;
-    if (!Array.isArray(courses)) return [];
 
-    for (const course of courses) {
-      const modulesRes = await axios.get(`/api/modules/course/${course.id}`);
-      const modules = modulesRes.data.data;
-      if (!Array.isArray(modules)) continue;
-
-      for (const module of modules) {
-        const lessonsRes = await axios.get(`/api/lessons/module/${module.id}`);
-        const lessons = lessonsRes.data.data;
-        if (!Array.isArray(lessons)) continue;
-
-        for (const lesson of lessons) {
-          allParams.push({
-            courseId: course.id.toString(),
-            moduleId: module.id.toString(),
-            lessonId: lesson.id.toString(),
-          });
-        }
-      }
-    }
-    return allParams;
-  } catch (error) {
-    console.error("Gagal membuat static params untuk learner lessons:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil semua data yang diperlukan untuk halaman ini saat build
 async function getLessonPageData(courseId, moduleId, lessonId) {

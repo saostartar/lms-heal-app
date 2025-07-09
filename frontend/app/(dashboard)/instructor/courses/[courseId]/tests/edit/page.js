@@ -1,23 +1,6 @@
 import axios from '@/lib/axios';
 import EditCourseTestClient from './edit-course-test-client';
 
-// Fungsi ini memberitahu Next.js semua ID course yang ada
-export async function generateStaticParams() {
-  try {
-    const res = await axios.get('/api/courses');
-    const courses = res.data.data;
-    if (!Array.isArray(courses)) return [];
-
-    // Kita akan generate halaman untuk semua course.
-    // Logika untuk redirect jika test tidak ada akan ditangani di client.
-    return courses.map((course) => ({
-      courseId: course.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Gagal membuat static params untuk edit-test:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil data test untuk satu course spesifik saat build
 async function getTestData(courseId) {

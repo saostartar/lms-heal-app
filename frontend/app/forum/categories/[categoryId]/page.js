@@ -1,21 +1,6 @@
 import axios from '@/lib/axios';
 import CategoryClient from './category-client';
 
-// Fungsi ini memberitahu Next.js semua ID kategori yang ada
-export async function generateStaticParams() {
-  try {
-    const res = await axios.get('/api/forum/categories');
-    const categories = res.data.data;
-    if (!Array.isArray(categories)) return [];
-
-    return categories.map((category) => ({
-      categoryId: category.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Gagal membuat static params untuk forum categories:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil data untuk satu kategori spesifik saat build
 async function getCategoryData(categoryId) {

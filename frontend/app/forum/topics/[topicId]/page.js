@@ -1,32 +1,6 @@
 import axios from '@/lib/axios';
 import TopicClient from './topic-client';
 
-// Fungsi ini memberitahu Next.js semua ID topik yang ada
-export async function generateStaticParams() {
-  try {
-    const allParams = [];
-    const categoriesRes = await axios.get('/api/forum/categories');
-    const categories = categoriesRes.data.data;
-    if (!Array.isArray(categories)) return [];
-
-    for (const category of categories) {
-      // Asumsi endpoint kategori mengembalikan topik-topiknya
-      const topicsRes = await axios.get(`/api/forum/categories/${category.id}`);
-      const topics = topicsRes.data.data.ForumTopics || [];
-      if (!Array.isArray(topics)) continue;
-
-      for (const topic of topics) {
-        allParams.push({
-          topicId: topic.id.toString(),
-        });
-      }
-    }
-    return allParams;
-  } catch (error) {
-    console.error("Gagal membuat static params untuk forum topics:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil data untuk satu topik spesifik saat build
 async function getTopicData(topicId) {

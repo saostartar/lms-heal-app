@@ -1,25 +1,6 @@
 import axios from '@/lib/axios';
 import AdminCourseDetailClient from './course-detail-client';
 
-export async function generateStaticParams() {
-  try {
-    const response = await axios.get('/api/courses');
-    const courses = response.data.data;
-
-    if (!Array.isArray(courses)) {
-      console.error("generateStaticParams: API tidak mengembalikan array kursus.");
-      return [];
-    }
-
-    return courses.map((course) => ({
-      courseId: course.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Gagal mengambil data untuk generateStaticParams:", error);
-    return [];
-  }
-}
-
 async function getCourseData(courseId) {
   try {
     // Fetch all data in parallel

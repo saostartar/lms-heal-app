@@ -2,33 +2,6 @@ import axios from '@/lib/axios';
 import ModuleDetailClient from './module-detail-client';
 import { cookies } from 'next/headers';
 
-// Fungsi ini memberitahu Next.js semua kombinasi course/module yang ada
-export async function generateStaticParams() {
-  try {
-    const allParams = [];
-    
-    const coursesRes = await axios.get('/api/courses');
-    const courses = coursesRes.data.data;
-    if (!Array.isArray(courses)) return [];
-
-    for (const course of courses) {
-      const modulesRes = await axios.get(`/api/modules/course/${course.id}`);
-      const modules = modulesRes.data.data;
-      if (!Array.isArray(modules)) continue;
-
-      for (const module of modules) {
-        allParams.push({
-          courseId: course.id.toString(),
-          moduleId: module.id.toString(),
-        });
-      }
-    }
-    return allParams;
-  } catch (error) {
-    console.error("Gagal membuat static params untuk learner module detail:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil semua data yang diperlukan untuk halaman ini saat build
 async function getModulePageData(courseId, moduleId) {

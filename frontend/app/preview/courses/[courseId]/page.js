@@ -1,29 +1,7 @@
 import axios from '@/lib/axios';
 import CoursePreviewClient from './course-preview-client';
 
-// Fungsi ini memberitahu Next.js semua ID course yang ada untuk dibuatkan halaman statis
-export async function generateStaticParams() {
-  try {
-    // Gunakan endpoint publik untuk mendapatkan semua kursus
-    const res = await axios.get('/api/public/courses');
-    const courses = res.data.data;
 
-    // Pastikan courses adalah array dan tidak kosong
-    if (!Array.isArray(courses) || courses.length === 0) {
-      console.warn("Tidak ada kursus publik yang ditemukan untuk generateStaticParams.");
-      return [];
-    }
-
-    return courses.map((course) => ({
-      courseId: course.id.toString(),
-    }));
-  } catch (error) {
-    // Log error dengan lebih detail
-    const errorMessage = error.response?.data?.message || error.message;
-    console.error(`Gagal membuat static params untuk course preview: ${errorMessage}`);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil semua data yang diperlukan untuk halaman ini saat build
 async function getCoursePreviewData(courseId) {

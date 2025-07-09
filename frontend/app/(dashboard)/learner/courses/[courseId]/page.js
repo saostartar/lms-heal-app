@@ -2,21 +2,7 @@ import axios from '@/lib/axios';
 import CourseDetailClient from './course-detail-client';
 import { cookies } from 'next/headers';
 
-// Fungsi ini memberitahu Next.js semua ID course yang ada
-export async function generateStaticParams() {
-  try {
-    const res = await axios.get('/api/courses');
-    const courses = res.data.data;
-    if (!Array.isArray(courses)) return [];
 
-    return courses.map((course) => ({
-      courseId: course.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Gagal membuat static params untuk course detail:", error);
-    return [];
-  }
-}
 
 // Fungsi ini mengambil semua data yang diperlukan untuk halaman ini saat build
 async function getCoursePageData(courseId) {
