@@ -17,29 +17,7 @@ export default function CreateLessonClient({ initialModule, params }) {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="relative">
-          <div className="h-16 w-16 rounded-full border-t-4 border-b-4 border-primary-600 animate-spin"></div>
-          <div className="h-12 w-12 rounded-full border-t-4 border-b-4 border-primary-400 animate-spin absolute top-2 left-2"></div>
-          <div className="h-8 w-8 rounded-full border-t-4 border-b-4 border-primary-200 animate-spin absolute top-4 left-4"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 border-l-4 border-red-500 text-red-600 p-6 rounded-md shadow-md flex items-center my-8 max-w-3xl mx-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mr-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-        </svg>
-        <p className="text-lg font-medium">{error}</p>
-      </div>
-    );
-  }
-
+  
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header with visual elements */}
