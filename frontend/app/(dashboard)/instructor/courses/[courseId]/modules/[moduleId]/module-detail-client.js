@@ -10,28 +10,34 @@ export default function ModuleDetailClient({ initialModule, initialLessons, init
   const { courseId, moduleId } = params;
   const router = useRouter();
   
-  const [module, setModule] = useState(initialModule);
-  const [lessons, setLessons] = useState(initialLessons);
-  const [quizzes, setQuizzes] = useState(initialQuizzes);
+  // PERBAIKAN: Berikan nilai default null/[] agar tidak error saat inisialisasi
+  const [module, setModule] = useState(initialModule || null);
+  const [lessons, setLessons] = useState(initialLessons || []);
+  const [quizzes, setQuizzes] = useState(initialQuizzes || []);
   
-  const [loading, setLoading] = useState(!initialModule); // Loading hanya jika tidak ada data awal
+  // Loading otomatis true jika initialModule tidak ada
+  const [loading, setLoading] = useState(!initialModule);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
+    // Jika data tidak dikirim dari server (karena kita hapus di page.js), ambil dari sini
     if (!initialModule) {
       const fetchModuleData = async () => {
         try {
           setLoading(true);
           
-          const { data: moduleData } = await axios.get(`/api/modules/${moduleId}`);
-          setModule(moduleData.data);
+          // Gunakan Promise.all agar lebih cepat (paralel)
+          const [moduleRes, lessonsRes, quizzesRes] = await Promise.all([
+            axios.get(`/api/modules/${moduleId}`),
+            axios.get(`/api/lessons/module/${moduleId}`),
+            axios.get(`/api/quizzes/module/${moduleId}`)
+          ]);
 
-          const { data: lessonsData } = await axios.get(`/api/lessons/module/${moduleId}`);
-          setLessons(lessonsData.data);
+          setModule(moduleRes.data.data);
+          setLessons(lessonsRes.data.data || []);
+          setQuizzes(quizzesRes.data.data || []);
 
-          const { data: quizzesData } = await axios.get(`/api/quizzes/module/${moduleId}`);
-          setQuizzes(quizzesData.data);
         } catch (err) {
           setError('Failed to load module: ' + (err.response?.data?.message || err.message));
           console.error(err);
@@ -43,6 +49,9 @@ export default function ModuleDetailClient({ initialModule, initialLessons, init
       fetchModuleData();
     }
   }, [moduleId, initialModule]);
+
+  // ... (Sisa kode ke bawah SAMA PERSIS dengan kode lama Anda) ...
+  // ... (handleDelete, render if loading, render error, render form, dll) ...
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this module? This action cannot be undone.')) {
