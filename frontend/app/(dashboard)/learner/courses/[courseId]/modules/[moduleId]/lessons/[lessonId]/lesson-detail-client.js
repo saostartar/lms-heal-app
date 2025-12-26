@@ -7,34 +7,145 @@ import {toast} from 'react-hot-toast';
 
 // Terima semua data awal sebagai props
 export default function LessonDetailClient({
-  initialLesson,
-  initialCourse,
-  initialModule,
-  initialProgress,
-  initialNextLesson,
-  initialPrevLesson,
-  initialError,
   params,
 }) {
   const router = useRouter();
-  const { courseId, moduleId } = params;
+  const { courseId, moduleId, lessonId } = params;
 
   // Inisialisasi state dari props
-  const [lesson, setLesson] = useState(initialLesson);
-  const [course, setCourse] = useState(initialCourse);
-  const [module, setModule] = useState(initialModule);
-  const [progress, setProgress] = useState(initialProgress);
-  const [loading, setLoading] = useState(!initialLesson && !initialError);
-  const [error, setError] = useState(initialError);
+  const [lesson, setLesson] = useState(null);
+  const [course, setCourse] = useState(null);
+  const [module, setModule] = useState(null);
+  const [progress, setProgress] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [completingLesson, setCompletingLesson] = useState(false);
-  const [nextLesson, setNextLesson] = useState(initialNextLesson);
-  const [prevLesson, setPrevLesson] = useState(initialPrevLesson);
+  const [nextLesson, setNextLesson] = useState(null);
+  const [prevLesson, setPrevLesson] = useState(null);
   const [showAttachments, setShowAttachments] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
 
-  // Hapus useEffect untuk fetchLessonData karena data sudah disediakan
+  // Helper function to convert YouTube watch URL to embed URL
+  const getEmbedUrl = (url) => {
+    if (!url) return '';
+    
+    // Regular expression to match YouTube video ID
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
 
-  // Track reading progress (ini tetap di client)
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+
+    return url; // Return original if not a youtube link (or already embed)
+  };
+
+  // Client-side fetching
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        console.log("Fetching lesson data...");
+
+        const [lessonRes, courseRes, moduleRes, progressRes, moduleLessonsRes, courseModulesRes] = await Promise.allSettled([
+          axios.get(`/api/lessons/${lessonId}`),
+          axios.get(`/api/courses/${courseId}`),
+          axios.get(`/api/modules/${moduleId}`),
+          axios.get(`/api/progress/course/${courseId}`),
+          axios.get(`/api/lessons/module/${moduleId}`),
+          axios.get(`/api/modules/course/${courseId}`),
+        ]);
+
+        const getData = (res) => (res.status === 'fulfilled' ? res.value.data.data : null);
+        const getError = (res) => (res.status === 'rejected' ? (res.reason.response?.data?.message || res.reason.message) : null);
+
+        const lessonData = getData(lessonRes);
+        const courseData = getData(courseRes);
+        const moduleData = getData(moduleRes);
+        const progressData = getData(progressRes);
+        const moduleLessonsData = getData(moduleLessonsRes) || [];
+        const courseModulesData = getData(courseModulesRes) || [];
+
+        if (!lessonData) {
+            throw new Error(getError(lessonRes) || "Failed to load lesson.");
+        }
+
+        // Logic for prev/next lesson
+        let prev = null;
+        let next = null;
+        const currentLessonIndex = moduleLessonsData.findIndex(l => l.id === parseInt(lessonId));
+
+        // Cari lesson sebelumnya
+        if (currentLessonIndex > 0) {
+            prev = moduleLessonsData[currentLessonIndex - 1];
+        } else {
+            const currentModuleIndex = courseModulesData.findIndex(m => m.id === parseInt(moduleId));
+            if (currentModuleIndex > 0) {
+                const prevModule = courseModulesData[currentModuleIndex - 1];
+                try {
+                    const { data: prevModuleLessonsData } = await axios.get(`/api/lessons/module/${prevModule.id}`);
+                    if (prevModuleLessonsData.data.length > 0) {
+                        prev = {
+                            ...prevModuleLessonsData.data[prevModuleLessonsData.data.length - 1],
+                            moduleId: prevModule.id,
+                        };
+                    }
+                } catch (e) {
+                    console.error("Error fetching previous module lessons", e);
+                }
+            }
+        }
+
+        // Cari lesson berikutnya
+        if (currentLessonIndex < moduleLessonsData.length - 1) {
+            next = moduleLessonsData[currentLessonIndex + 1];
+        } else {
+            const currentModuleIndex = courseModulesData.findIndex(m => m.id === parseInt(moduleId));
+            if (currentModuleIndex < courseModulesData.length - 1) {
+                const nextModule = courseModulesData[currentModuleIndex + 1];
+                try {
+                    const { data: nextModuleLessonsData } = await axios.get(`/api/lessons/module/${nextModule.id}`);
+                    if (nextModuleLessonsData.data.length > 0) {
+                        next = {
+                            ...nextModuleLessonsData.data[0],
+                            moduleId: nextModule.id,
+                        };
+                    }
+                } catch (e) {
+                    console.error("Error fetching next module lessons", e);
+                }
+            }
+        }
+
+        if (lessonData.attachments && !Array.isArray(lessonData.attachments)) {
+            try {
+                lessonData.attachments = typeof lessonData.attachments === 'string' ? JSON.parse(lessonData.attachments) : [];
+                if (!Array.isArray(lessonData.attachments)) lessonData.attachments = [];
+            } catch (e) {
+                lessonData.attachments = [];
+            }
+        }
+
+        setLesson(lessonData);
+        setCourse(courseData);
+        setModule(moduleData);
+        setProgress(progressData);
+        setNextLesson(next);
+        setPrevLesson(prev);
+
+      } catch (err) {
+        console.error("Error fetching lesson data:", err);
+        setError(err.response?.data?.message || err.message || "Failed to load lesson data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (lessonId && courseId && moduleId) {
+      fetchData();
+    }
+  }, [lessonId, courseId, moduleId]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
@@ -73,10 +184,8 @@ export default function LessonDetailClient({
     }
   };
 
-  // Function to safely render HTML content
   const renderHTMLContent = (content) => {
     if (!content) return '';
-    
     return (
       <div 
         className="lesson-content"
@@ -251,9 +360,9 @@ export default function LessonDetailClient({
             {lesson.videoUrl && (
               <div className="mb-12">
                 <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
-                  <div className="aspect-w-16 aspect-h-9">
+                  <div className="aspect-video">
                     <iframe
-                      src={lesson.videoUrl}
+                      src={getEmbedUrl(lesson.videoUrl)}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -324,18 +433,18 @@ export default function LessonDetailClient({
                   }
                   .lesson-content p { 
                     margin-bottom: 1.25rem; 
-                    line-height: 1.75;
-                    color: #374151;
+                    line-height: 1.75; 
+                    color: #374151; 
                     font-size: 1.125rem;
                   }
                   .lesson-content ul, .lesson-content ol { 
                     margin-bottom: 1.25rem; 
-                    padding-left: 2rem;
-                    color: #374151;
+                    padding-left: 2rem; 
+                    color: #374151; 
                   }
                   .lesson-content li { 
                     margin-bottom: 0.5rem; 
-                    line-height: 1.6;
+                    line-height: 1.6; 
                   }
                   .lesson-content blockquote { 
                     border-left: 4px solid #e5e7eb; 
@@ -355,9 +464,9 @@ export default function LessonDetailClient({
                     background-color: #1f2937; 
                     color: #f9fafb; 
                     padding: 1rem; 
-                    border-radius: 0.5rem;
-                    overflow-x: auto;
-                    margin: 1.5rem 0;
+                    border-radius: 0.5rem; 
+                    overflow-x: auto; 
+                    margin: 1.5rem 0; 
                   }
                   .lesson-content pre code {
                     background-color: transparent;
@@ -367,12 +476,12 @@ export default function LessonDetailClient({
                   .lesson-content img { 
                     max-width: 100%; 
                     height: auto; 
-                    border-radius: 0.5rem;
-                    margin: 1.5rem 0;
+                    border-radius: 0.5rem; 
+                    margin: 1.5rem 0; 
                   }
                   .lesson-content a { 
                     color: #3b82f6; 
-                    text-decoration: underline;
+                    text-decoration: underline; 
                   }
                   .lesson-content a:hover { 
                     color: #1d4ed8; 

@@ -1,44 +1,16 @@
-import axios from '@/lib/axios';
 import CourseEnrollClient from './enroll-client';
 
-// Fungsi ini memberitahu Next.js semua ID course yang ada
+// Fungsi generateStaticParams tetap aman karena mengambil data public (/api/courses)
+// yang biasanya tidak butuh token. Jika butuh token, hapus saja fungsi ini.
 export async function generateStaticParams() {
-  try {
-    const res = await axios.get('/api/courses');
-    const courses = res.data.data;
-    if (!Array.isArray(courses)) return [];
-
-    return courses.map((course) => ({
-      courseId: course.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Gagal membuat static params untuk enroll page:", error);
-    return [];
-  }
+  // Biarkan kosong atau implementasikan fetch public jika API Anda mengizinkan
+  return []; 
 }
 
-// Fungsi ini mengambil data untuk satu course spesifik saat build
-async function getCourseData(courseId) {
-  try {
-    const { data } = await axios.get(`/api/courses/${courseId}`);
-    return { course: data.data, error: null };
-  } catch (error) {
-    console.error(`Gagal mengambil data untuk course ${courseId}:`, error);
-    return { course: null, error: 'Failed to load course details.' };
-  }
-}
-
-// Ini adalah Server Component
-export default async function CourseEnrollPage({ params }) {
-  const { courseId } = params;
-  const { course, error } = await getCourseData(courseId);
-
-  // Render Client Component dengan data awal dari server
+export default function CourseEnrollPage({ params }) {
+  // Langsung render Client Component tanpa fetch data di server
+  // Biarkan Client Component yang mengambil data dengan token dari LocalStorage
   return (
-    <CourseEnrollClient 
-      initialCourse={course} 
-      initialError={error}
-      params={params} 
-    />
+    <CourseEnrollClient params={params} />
   );
 }

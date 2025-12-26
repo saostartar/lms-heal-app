@@ -6,52 +6,89 @@ import Link from "next/link";
 import axios from "@/lib/axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  BookOpen, 
-  Clock, 
-  Award, 
-  CheckCircle, 
-  ChevronRight, 
-  Users, 
-  BarChart2,
-  PlayCircle,
-  FileText,
-  Star,
-  Calendar,
-  Target,
-  TrendingUp,
-  Zap,
-  BookmarkCheck,
-  ArrowLeft,
-  Loader2
+  BookOpen, Clock, Award, CheckCircle, ChevronRight, Users, 
+  BarChart2, PlayCircle, FileText, Star, Calendar, Target, 
+  TrendingUp, Zap, BookmarkCheck, ArrowLeft, Loader2
 } from 'lucide-react';
 
-// Terima semua data awal sebagai props
-export default function CourseDetailClient({
-  initialCourse,
-  initialModules,
-  initialEnrollment,
-  initialProgressData,
-  initialAccessStatus,
-  initialError,
-  params,
-}) {
+export default function CourseDetailClient({ params }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseId = params.courseId;
   
-  // Inisialisasi state dari props
-  const [course, setCourse] = useState(initialCourse);
-  const [modules, setModules] = useState(initialModules || []);
-  const [enrollment, setEnrollment] = useState(initialEnrollment);
-  const [loading, setLoading] = useState(!initialCourse && !initialError);
+  // State inisialisasi kosong
+  const [course, setCourse] = useState(null);
+  const [modules, setModules] = useState([]);
+  const [enrollment, setEnrollment] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+  const [accessStatus, setAccessStatus] = useState(null);
+  
+  const [loading, setLoading] = useState(true);
   const [enrollLoading, setEnrollLoading] = useState(false);
-  const [error, setError] = useState(initialError);
-  const [accessStatus, setAccessStatus] = useState(initialAccessStatus);
-  const [activeModule, setActiveModule] = useState(initialModules?.[0]?.id || null);
+  const [error, setError] = useState(null);
+  
+  const [activeModule, setActiveModule] = useState(null);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
-  const [progressData, setProgressData] = useState(initialProgressData);
 
-  // useEffect untuk fetching data sudah tidak diperlukan lagi
+  // --- FETCH DATA DI SINI (CLIENT SIDE) ---
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        console.log("Fetching course data...");
+
+        // 1. Ambil data Course, Module, Enrollment, & Access Status secara paralel
+        const [courseRes, modulesRes, enrollmentRes, accessStatusRes] = await Promise.allSettled([
+          axios.get(`/api/courses/${courseId}`),
+          axios.get(`/api/modules/course/${courseId}`),
+          axios.get(`/api/learner/enrollments/course/${courseId}`),
+          axios.get(`/api/analytics/course/${courseId}/access-status`)
+        ]);
+
+        // Helper untuk ambil data dari Promise.allSettled
+        const getData = (res) => (res.status === 'fulfilled' ? res.value.data.data : null);
+
+        const courseData = getData(courseRes);
+        const modulesData = getData(modulesRes) || [];
+        const enrollmentData = getData(enrollmentRes);
+        const accessStatusData = getData(accessStatusRes);
+
+        if (!courseData) {
+          throw new Error("Failed to load course details.");
+        }
+
+        setCourse(courseData);
+        setModules(modulesData);
+        setEnrollment(enrollmentData);
+        setAccessStatus(accessStatusData);
+        
+        // Set module aktif pertama jika ada
+        if (modulesData.length > 0) {
+          setActiveModule(modulesData[0].id);
+        }
+
+        // 2. Jika user sudah enroll, ambil data Progress
+        if (enrollmentData) {
+          try {
+            const progressRes = await axios.get(`/api/progress/course/${courseId}`);
+            setProgressData(progressRes.data.data);
+          } catch (progErr) {
+            console.error("Failed to load progress:", progErr);
+          }
+        }
+
+      } catch (err) {
+        console.error("Error fetching course data:", err);
+        setError(err.response?.data?.message || err.message || "Failed to load course data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (courseId) {
+      fetchData();
+    }
+  }, [courseId]);
 
   // Check for completion message from URL params (tetap di client)
   useEffect(() => {

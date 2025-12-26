@@ -1,28 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import axios from "@/lib/axios"; // Ensure axios is imported
 
 // Terima data awal sebagai props
 export default function ModuleDetailClient({
-  initialModule,
-  initialCourse,
-  initialLessons,
-  initialQuizzes,
-  initialProgress,
-  initialError,
+  // initialModule, // No longer used for initial state
+  // initialCourse,
+  // initialLessons,
+  // initialQuizzes,
+  // initialProgress,
+  // initialError,
   params,
 }) {
-  const { courseId } = params;
+  const { courseId, moduleId } = params;
 
-  // Inisialisasi state dengan data dari server
-  const [module] = useState(initialModule);
-  const [course] = useState(initialCourse);
-  const [lessons] = useState(initialLessons);
-  const [quizzes] = useState(initialQuizzes);
-  const [progress] = useState(initialProgress);
-  const [loading] = useState(!initialModule && !initialError);
-  const [error] = useState(initialError);
+  // Inisialisasi state kosong/loading
+  const [module, setModule] = useState(null);
+  const [course, setCourse] = useState(null);
+  const [lessons, setLessons] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [progress, setProgress] = useState({ lessons: [], quizzes: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Client-side fetching
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        console.log("Fetching module data...");
+
+        const [moduleRes, courseRes, lessonsRes, quizzesRes, progressRes] = await Promise.allSettled([
+          axios.get(`/api/modules/${moduleId}`),
+          axios.get(`/api/courses/${courseId}`),
+          axios.get(`/api/lessons/module/${moduleId}`),
+          axios.get(`/api/quizzes/module/${moduleId}`),
+          axios.get(`/api/progress/module/${moduleId}`)
+        ]);
+
+        // Helper to extract data
+        const getData = (res) => (res.status === 'fulfilled' ? res.value.data.data : null);
+        const getError = (res) => (res.status === 'rejected' ? (res.reason.response?.data?.message || res.reason.message) : null);
+
+        // Check for critical errors (module/course)
+        const moduleError = getError(moduleRes);
+        const courseError = getError(courseRes);
+
+        if (moduleError || courseError) {
+            throw new Error(moduleError || courseError || "Failed to load module data.");
+        }
+
+        setModule(getData(moduleRes));
+        setCourse(getData(courseRes));
+        setLessons(getData(lessonsRes) || []);
+        setQuizzes(getData(quizzesRes) || []);
+        setProgress(getData(progressRes) || { lessons: [], quizzes: [] });
+
+      } catch (err) {
+        console.error("Error fetching module data:", err);
+        setError(err.response?.data?.message || err.message || "Failed to load module data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (courseId && moduleId) {
+      fetchData();
+    }
+  }, [courseId, moduleId]);
+
 
   if (loading) {
     return (
@@ -62,7 +110,7 @@ export default function ModuleDetailClient({
           </h3>
           <p className="text-red-700 mb-4">{error}</p>
           <Link
-            href={`/dashboard/learner/courses/${courseId}`}
+            href={`/learner/courses/${courseId}`}
             className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full transition-all duration-200 transform hover:scale-105 shadow-md">
             Return to Course
           </Link>
@@ -97,7 +145,7 @@ export default function ModuleDetailClient({
           been moved or removed.
         </p>
         <Link
-          href={`/dashboard/learner/courses/${courseId}`}
+          href={`/learner/courses/${courseId}`}
           className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           Return to Course
         </Link>
@@ -426,7 +474,7 @@ export default function ModuleDetailClient({
               {quizzes.map((quiz) => {
                 // Determine if quiz has been started or completed
                 const quizProgress = progress.quizzes?.find(
-                  q => q.quizId === quiz.id
+                  (q) => q.quizId === quiz.id
                 );
                 const isCompleted = quizProgress?.completed || false;
                 const score = quizProgress?.score || null;
@@ -513,7 +561,7 @@ export default function ModuleDetailClient({
                               {isCompleted ? "Completed" : "Not Attempted"}
                             </span>
                           </div>
-                          
+
                           {isCompleted && score !== null && (
                             <div className="mt-3 bg-white/50 p-2 rounded-lg">
                               <div className="flex items-center justify-between">
